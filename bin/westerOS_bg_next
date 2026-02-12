@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Random wallpaper from backgrounds (recursive, ignoring hidden folders)
+
+THEME_NAME="$(cat "$HOME/.omarchy/current/theme.name" 2>/dev/null || true)"
+THEME_BACKGROUNDS_PATH="$HOME/.omarchy/current/theme/backgrounds"
+CURRENT_BACKGROUND_LINK="$HOME/.omarchy/current/background"
+
+USER_BACKGROUNDS_PATH=""
+if [[ -n "${THEME_NAME}" ]]; then
+  USER_BACKGROUNDS_PATH="$HOME/.omarchy/themes/$THEME_NAME/backgrounds"
+fi
+
+# Recursively find files, but prune hidden directories
+if [[ -n "${USER_BACKGROUNDS_PATH}" ]]; then
+  mapfile -d '' -t BACKGROUNDS < <(
+    find -L \
+      "$USER_BACKGROUNDS_PATH" "$THEME_BACKGROUNDS_PATH" \
+      \( -type d -name '.*' -prune \) -o \
+      \( -type f -print0 \) 2>/dev/null
+  )
+else
+  mapfile -d '' -t BACKGROUNDS < <(
+    find -L \
+      "$THEME_BACKGROUNDS_PATH" \
+      \( -type d -name '.*' -prune \) -o \
+      \( -type f -print0 \) 2>/dev/null
+  )
+fi
+
+TOTAL=${#BACKGROUNDS[@]}
+
+if [[ $TOTAL -eq 0 ]]; then
+  notify-send "No background was found for theme" -t 2000
+  pkill -x swaybg || true
+  setsid uwsm-app -- swaybg --color '#000000' >/dev/null 2>&1 &
+  exit 0
+fi
+
+# Pick random wallpaper
+RANDOM_INDEX=$(( RANDOM % TOTAL ))
+NEW_BACKGROUND="${BACKGROUNDS[$RANDOM_INDEX]}"
+
+ln -nsf "$NEW_BACKGROUND" "$CURRENT_BACKGROUND_LINK"
+
+pkill -x swaybg || true
+setsid swaybg -i "$CURRENT_BACKGROUND_LINK" -m fill >/dev/null 2>&1 &
+
