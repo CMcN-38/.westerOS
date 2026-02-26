@@ -39,7 +39,7 @@ mv "$NEXT_THEME_PATH" "$CURRENT_THEME_PATH"
 echo "$THEME_NAME" > "$HOME/.omarchy/current/theme.name"
 
 # Change background with theme
-next-bg
+westerOS_bg_next
 
 # Restart components to apply new theme
 # if pgrep -x waybar >/dev/null; then

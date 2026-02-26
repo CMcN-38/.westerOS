@@ -53,6 +53,11 @@
 
 ☑️ - Build in dotfiles 
 
+## ASCII Headings:
+All ASCII text headings are created using https://patorjk.com with the following fonts:
+- H1: Fraktur
+- H2: Colossal
+- H3: RubiFont
 
 ## 🩵 Thanks To
 [No Boilerplate](https://github.com/0atman) -

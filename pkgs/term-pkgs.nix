@@ -34,6 +34,7 @@ services.udev.packages = [
     bat                 # improved cat
     bluetui             # tui bluetooth manager
     btop                # tui taskmanager
+    claude-code
     docker              # docker containters
     # file               
     fastfetch           # system info

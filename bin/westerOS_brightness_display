@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+step="${1:-+5%}"
+
+# Get the focused monitor
+focused_monitor="$(hyprctl monitors -j | jq -r '.[]|select(.focused==true).name')"
+
+# Check if the focused monitor is an external monitor (not eDP)
+if [[ "$focused_monitor" != eDP* ]] && command -v ddcutil &>/dev/null; then
+    # External monitor detected, use ddcutil
+    # Get the display number for this monitor
+    display_num=$(ddcutil detect --brief | grep -B1 "$focused_monitor" | grep "Display" | awk '{print $2}' | tr -d ':')
+
+    if [[ -z "$display_num" ]]; then
+        # Fallback: use the first external display
+        display_num="1"
+    fi
+
+    # Get current brightness
+    current=$(ddcutil getvcp 10 --display "$display_num" --brief 2>/dev/null | awk '{print $4}')
+
+    if [[ -n "$current" ]]; then
+        # Parse the step value
+        if [[ "$step" =~ ^[+-]([0-9]+)%$ ]]; then
+            change="${BASH_REMATCH[1]}"
+            if [[ "$step" == +* ]]; then
+                new_brightness=$((current + change))
+            else
+                new_brightness=$((current - change))
+            fi
+        elif [[ "$step" =~ ^([0-9]+)%?$ ]]; then
+            new_brightness="${BASH_REMATCH[1]}"
+        else
+            new_brightness="$current"
+        fi
+
+        # Clamp between 0 and 100
+        [[ $new_brightness -lt 0 ]] && new_brightness=0
+        [[ $new_brightness -gt 100 ]] && new_brightness=100
+
+        # Set the new brightness
+        ddcutil setvcp 10 "$new_brightness" --display "$display_num" 2>/dev/null
+
+        # Show OSD
+        westerOS_swayosd_brightness "$new_brightness"
+    fi
+else
+    # Internal display, use brightnessctl
+    device="$(ls -1 /sys/class/backlight 2>/dev/null | head -n1)"
+    for candidate in amdgpu_bl* intel_backlight acpi_video*; do
+        if [[ -e "/sys/class/backlight/$candidate" ]]; then
+            device="$candidate"
+            break
+        fi
+    done
+
+    brightnessctl -d "$device" set "$step" >/dev/null
+
+    westerOS_swayosd_brightness "$(brightnessctl -d "$device" -m | cut -d',' -f4 | tr -d '%')"
+fi

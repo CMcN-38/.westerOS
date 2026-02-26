@@ -68,7 +68,7 @@
 #                   
     services.openssh = {
         enable = true;
-        settings.PubkeyAuthentiacation = true;
+        settings.PubkeyAuthentication = true;
         settings.PasswordAuthentication = true; # Ideally this would be false but due to Blink bugs, necessary.
     };
 

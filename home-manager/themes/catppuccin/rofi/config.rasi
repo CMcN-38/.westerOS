@@ -4,7 +4,7 @@ configuration{
     font: "FiraCode Nerd Font 24";
     show-icons: false;
     icon-theme: "Papirus";
-    terminal: "alacritty";
+    terminal: "kitty";
     drun-display-format: "{icon} {name}";
     location: 0;
     disable-history: false;
@@ -16,7 +16,7 @@ configuration{
     sidebar-mode: true;
 }
 
-@theme "catppuccin-mocha"
+@theme "colors"
 
 element-text, element-icon , mode-switcher {
     background-color: inherit;

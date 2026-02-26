@@ -22,8 +22,10 @@ wayland.windowManager.hyprland = {
           env = QT_AUTO_SCREEN_SCALE_FACTOR, 1
           env = SDL_VIDEODRIVER, x11
           env = MOZ_ENABLE_WAYLAND, 1
-          exec-once = dbus-update-activation-environment --systemd --all
-          exec-once = systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+        exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR DISPLAY
+        exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR DISPLAY
+          # exec-once = dbus-update-activation-environment --systemd --all
+          # exec-once = systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
           exec-once = nm-applet --indicator
           exec-once = lxqt-policykit-agent
     exec-once = waybar
@@ -237,6 +239,7 @@ wayland.windowManager.hyprland = {
 
     # Screenshots
     bind = $mainMod, S, exec, westerOS_screenshot
+    # bind = $mainMod, S, exec, gradia --screenshot
 
     # Autolauch
     exec-once = kitty
@@ -293,37 +296,37 @@ wayland.windowManager.hyprland = {
                                 };
                         };
 
-                        background = [
-                                {
-                                        path = "screenshot";
-                                        blur_passes = 3;
-                                        blur_size = 8;
-                                }
-                        ];
+                        # background = [
+                        #         {
+                        #                 path = "screenshot";
+                        #                 blur_passes = 3;
+                        #                 blur_size = 8;
+                        #         }
+                        # ];
 
-                        input-field = [
-                                {
-                                        size = "650, 100";
-                                        position = "0, 0";
-                                        monitor = "";
-                                        halign = "center";
-                                        valign = "center";
-
-                                        dots_center = true;
-                                        fade_on_empty = false;
-
-                                        font_color = "rgb(205, 214, 244)";
-                                        inner_color = "rgb(127, 132, 156)";
-                                        outer_color = "rgb(30, 30, 46)";
-                                        outline_thickness = 5;
-                                        rounding = 25;
-
-                                        placeholder_text = "...";
-                                        fail_text = "Try again...";
-                                        shadow_passes = 0;
-                                        
-                                }
-                        ];
+                        # input-field = [
+                        #         {
+                        #                 size = "650, 100";
+                        #                 position = "0, 0";
+                        #                 monitor = "";
+                        #                 halign = "center";
+                        #                 valign = "center";
+                        #
+                        #                 dots_center = true;
+                        #                 fade_on_empty = false;
+                        #
+                        #                 font_color = "rgb(205, 214, 244)";
+                        #                 inner_color = "rgb(127, 132, 156)";
+                        #                 outer_color = "rgb(30, 30, 46)";
+                        #                 outline_thickness = 5;
+                        #                 rounding = 25;
+                        #
+                        #                 placeholder_text = "...";
+                        #                 fail_text = "Try again...";
+                        #                 shadow_passes = 0;
+                        #                 
+                        #         }
+                        # ];
                 };
         };
 }

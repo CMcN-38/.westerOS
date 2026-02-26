@@ -1,4 +1,3 @@
-
 #                                     .x+=:.        s                                    ....                ...         
 #      x=~                           z`    ^%      :8                                .x~X88888Hx.        .x888888hx    : 
 #     88x.   .e.   .e.                  .   <k    .88                  .u    .      H8X 888888888h.     d88888888888hxx  
@@ -42,20 +41,37 @@
     };
 
     security.rtkit.enable = true;
-    hardware.pulseaudio.extraConfig = "load-module module-device-manager";
-    services.pipewire = {
-        enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        pulse.enable = true;
-        jack.enable = true;
+    services = {
+        pulseaudio.extraConfig = "load-module module-device-manager";
+        pipewire = {
+            enable = true;
+            alsa.enable = true;
+            alsa.support32Bit = true;
+            pulse.enable = true;
+            jack.enable = true;
+        };
     };
 
 
     environment.systemPackages = with pkgs; [
         hidapi          # C library for HID devices
         # logiops         # Logitech options (not really used anymore)
+
+        # Packages to enable yubikey use
+        yubikey-manager
+        pam_u2f
+        libfido2
     ];
+    
+    # Yubikey Setup for sudo
+    services.pcscd.enable = true;
+    security.pam.services.sudo = {
+        unixAuth = false;
+        u2fAuth = true;
+    };
+    
+    #External Monitor Controls
+    hardware.i2c.enable = true;
 #
 #    ▗▄▄▄ ▗▄▄▖ ▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖
 #    ▐▌  █▐▌ ▐▌  █  ▐▌  ▐▌▐▌   ▐▌   
@@ -91,12 +107,8 @@
         powerOnBoot = true;
     };
     services.blueman.enable = true;
-    environment.systemPackages += with pkgs; [
-        bluez
-
-    ]
-
-
-
-
+    
+    # environment.systemPackages = with pkgs; [
+    #     bluez
+    # ];
 }

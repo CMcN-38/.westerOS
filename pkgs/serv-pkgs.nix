@@ -27,21 +27,21 @@
   environment.systemPackages = with pkgs; [
     appimage-run
     apprun-cli
-    bluez
+    brightnessctl
     cargo
     clang_18
+    ddcutil
     espanso-wayland
     gccgo13
     gtk4
     glib
     go
-    hidapi
     imagemagick
     imagemagickBig
+    jq
     lua
     libnotify
-    logiops
-    xorg.libxcb
+    libxcb
     mosh
     # networkmanagerapplet
     nodejs_22
@@ -86,20 +86,5 @@
   #┗┻┗┻┗┻┗┗┛
 
   # Enable sound.
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  hardware.pulseaudio.extraConfig = "load-module module-device-manager";
-  services.blueman.enable = true;
-
-  services.udisks2.enable = true;
-  services.devmon.enable = true; # optional: auto-mount for desktops
 
 }

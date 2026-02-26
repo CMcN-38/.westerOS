@@ -25,29 +25,30 @@
   inputs,
   ...
 }: {
-  #•
-  #┓┏┳┓┏┓┏┓┏┓╋┏
-  #┗┛┗┗┣┛┗┛┛ ┗┛
-  #    ┛
+#•
+#┓┏┳┓┏┓┏┓┏┓╋┏
+#┗┛┗┗┣┛┗┛┛ ┗┛
+#    ┛
 
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    inputs.home-manager.nixosModules.default
+    imports = [
+        # Include the results of the hardware scan.
+        ./hardware-configuration.nix
+        inputs.home-manager.nixosModules.default
 
-    # Packages:
-    ../pkgs/gui-pkgs.nix
-    ../pkgs/serv-pkgs.nix
-    ../pkgs/term-pkgs.nix
-    ../pkgs/wm-pkgs.nix
-    ../pkgs/fonts.nix
+        # Packages:
+        ../../pkgs/gui-pkgs.nix
+        ../../pkgs/serv-pkgs.nix
+        ../../pkgs/term-pkgs.nix
+        ../../pkgs/wm-pkgs.nix
+        ../../pkgs/fonts.nix
 
 
-    # Modules:
-    ../../modules/networking.nix
-    ../../modules/users.nix
-    ../../modules/devices.nix
-    ../../modules/settings.nix
-  ];
+        # Modules:
+        ../../modules/networking.nix
+        ../../modules/users.nix
+        ../../modules/devices.nix
+        ../../modules/settings.nix
+        ../../modules/style.nix
+    ];
 
 }

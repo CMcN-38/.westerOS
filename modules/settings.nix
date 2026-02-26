@@ -27,6 +27,7 @@
 #                                                    "Y88P"           
 
 {
+    pkgs,
     ...
 }: {
 
@@ -54,5 +55,12 @@
 #                                                     
 
     boot.loader.systemd-boot.enable=true;
-    boot.leader.efi.canTouchEfiVariables = true:
+    boot.loader.efi.canTouchEfiVariables = true;
+
+#    ▗▖ ▗▖▗▄▄▄ ▗▄▄▄▖▗▖  ▗▖
+#    ▐▌ ▐▌▐▌  █▐▌   ▐▌  ▐▌
+#    ▐▌ ▐▌▐▌  █▐▛▀▀▘▐▌  ▐▌
+#    ▝▚▄▞▘▐▙▄▄▀▐▙▄▄▖ ▝▚▞▘ 
+#                         
+    services.udev.packages = [ pkgs.swayosd ];
 }

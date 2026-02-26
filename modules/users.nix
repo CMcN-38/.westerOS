@@ -23,6 +23,7 @@
 
 {
     inputs,
+    config,
     pkgs,
     ...
 }: {
@@ -37,7 +38,7 @@
     users.users.cameron = {
         isNormalUser = true;
         shell = pkgs.zsh;
-        extraGroup = ["wheel" "input" "dialout"];
+        extraGroups = ["wheel" "input" "dialout"];
     };
     
     # Set default session variables for this user.
@@ -49,11 +50,4 @@
     };
 
     # Import home-manager configs for this user.
-    home-manager = {
-        extraSpectialArgs = {inherit inputs;};
-        users = {
-            "cameron" = import /home/cameron/.westerOS/home-manager/home-targaryen.nix;
-        };
-        backupFileExtension = ".bkp";
-    };
 }

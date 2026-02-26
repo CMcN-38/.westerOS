@@ -1,3 +1,13 @@
 #!/usr/bin/env bash
 
 grim -g "$(slurp)" - |swappy -f -
+
+
+# Trying to get gradia to work:
+# DIR="$HOME/4_media/42_screenshots"
+# mkdir -p "$DIR"
+#
+# FILE="$DIR/$(date +'%Y-%m-%d_%H-%M-%S').png"
+#
+# grim -g "$(slurp)" - > "$FILE"
+# gradia "$FILE"
