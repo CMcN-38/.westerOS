@@ -249,6 +249,16 @@ wayland.windowManager.hyprland = {
     exec-once = obsidian
     exec-once = transmission-gtk
     
+    $osdclient = swayosd-client --monitor "$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')"
+
+    bindeld = ,XF86AudioRaiseVolume, Volume up, exec, $osdclient --output-volume raise
+    bindeld = ,XF86AudioLowerVolume, Volume up, exec, $osdclient --output-volume lower
+    bindeld = ,XF86AudioMute, Volume up, exec, $osdclient --output-volume mute-toggle
+
+    bindeld = ,XF86MonBrightnessUp, Brightness up, exec, westerOS_brightness_display +10%
+    bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display -10%
+
+    # bindeld = ,XF86AudioPlay, exec, $osdclient --playerctl play-pause
         '';
 };
         services.hypridle = {
