@@ -56,20 +56,8 @@
     environment.systemPackages = with pkgs; [
         hidapi          # C library for HID devices
         # logiops         # Logitech options (not really used anymore)
-
-        # Packages to enable yubikey use
-        yubikey-manager
-        pam_u2f
-        libfido2
     ];
-    
-    # Yubikey Setup for sudo
-    services.pcscd.enable = true;
-    security.pam.services.sudo = {
-        unixAuth = false;
-        u2fAuth = true;
-    };
-    
+
     #External Monitor Controls
     hardware.i2c.enable = true;
 #

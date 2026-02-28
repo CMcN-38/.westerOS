@@ -51,4 +51,18 @@
         ../../modules/style.nix
     ];
 
+    # Packages to enable yubikey use
+    environment.systemPackages = with pkgs; [
+        yubikey-manager
+        pam_u2f
+        libfido2
+    ];
+
+    # Yubikey Setup for sudo
+    services.pcscd.enable = true;
+    security.pam.services.sudo = {
+        unixAuth = false;
+        u2fAuth = true;
+    };
+
 }
