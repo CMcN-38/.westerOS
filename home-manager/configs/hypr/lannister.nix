@@ -39,8 +39,8 @@ wayland.windowManager.hyprland = {
     exec-once = goxlr-daemon --http-disable
     exec-once = solaar -w hide
     exec-once = syncthing
-          # monitor=,preferred,auto,1
-    monitor=,3840x2160@60,auto,1
+          monitor=,preferred,auto,1.5
+    # monitor=,3840x2160@60,auto,1
 
     # Set programs that you use
     $terminal = kitty
@@ -257,7 +257,7 @@ wayland.windowManager.hyprland = {
     bindeld = ,XF86AudioMute, Volume up, exec, $osdclient --output-volume mute-toggle
 
     bindeld = ,XF86MonBrightnessUp, Brightness up, exec, westerOS_brightness_display +10%
-    bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display -10%
+    bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display 10%-
 
     # bindeld = ,XF86AudioPlay, exec, $osdclient --playerctl play-pause
         '';

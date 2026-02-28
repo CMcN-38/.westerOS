@@ -43,6 +43,7 @@
     thonny                      # pi-zero IDE
     transmission_4-gtk          # torrent interface
     zotero                      # document manager (replacing with paperless)
+  google-chrome
   ];
 
   services.goxlr-utility.enable = true;
