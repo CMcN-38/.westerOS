@@ -25,6 +25,7 @@
 
 {
     pkgs,
+    config,
     lib,
     inputs,
     ...
@@ -33,7 +34,7 @@
     home-manager = {
         users.cameron ={
             imports = [
-                ../hosts/targaryen/home-configuration.nix
+                ../hosts/${config.networking.hostName}/home-configuration.nix
                     inputs.stylix.homeManagerModules.stylix 
             ];
 
