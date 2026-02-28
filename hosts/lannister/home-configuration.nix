@@ -50,4 +50,22 @@
   programs.home-manager.enable = true;
 
   qt.enable = true;
+
+  # Configure XDG user directories - disable Desktop and Downloads
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = false; # Don't auto-create directories
+
+    # Point Desktop and Downloads to custom locations
+    desktop = "${config.home.homeDirectory}/2_desktop";
+    download = "${config.home.homeDirectory}/3_downloads";
+
+    # Keep standard locations for other directories
+    documents = "${config.home.homeDirectory}/Documents";
+    music = "${config.home.homeDirectory}/Music";
+    pictures = "${config.home.homeDirectory}/Pictures";
+    videos = "${config.home.homeDirectory}/Videos";
+    templates = "${config.home.homeDirectory}/Templates";
+    publicShare = "${config.home.homeDirectory}/Public";
+  };
 }
