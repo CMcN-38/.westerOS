@@ -4,9 +4,9 @@ pushd /home/cameron/.westerOS/
 nvim
 #alejandra . &>/dev/null
 git diff -U0 *.nix
-echo "NixOS Rebuilding..."
-# The following line is the rebuild command, this would need altering along with new hosts
-sudo nixos-rebuild test --flake /home/cameron/.westerOS/#targaryen &> nixos-switch.log || (
+HOSTNAME=$(hostname)
+echo "NixOS Rebuilding (test) for host: $HOSTNAME..."
+sudo nixos-rebuild test --flake /home/cameron/.westerOS/#$HOSTNAME &> nixos-switch.log || (
 	sudo cat nixos-switch.log | grep --color error && false)
 gen=$(nixos-rebuild list-generations | grep current)
 git commit -am "$(date)"

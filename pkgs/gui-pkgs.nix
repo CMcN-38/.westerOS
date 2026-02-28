@@ -30,6 +30,7 @@
     discord                     # discord
     evince                      # document viewer
     goxlr-utility               # goxlr controller
+    hypnotix                    # iptv player
     imv                         # image viewer
     kitty                       # terminal
     keymapp                     # keyboard mapping
