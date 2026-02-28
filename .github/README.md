@@ -1,5 +1,5 @@
 <h1 align="center">
-      <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nix-snowflake.svg" width="96px" height="96px" />
+      <img src="https://camo.githubusercontent.com/4ea967ac5d97b06e2eb7cd18daf9d89ce6cf8f7f7ebe4ef8cf36e72a3821e77f/68747470733a2f2f6272616e642e6e69786f732e6f72672f6c6f676f732f6e69786f732d6c6f676f2d64656661756c742d6772616469656e742d77686974652d726567756c61722d686f72697a6f6e74616c2d6d696e696d616c2e737667" width="96px" height="96px" />
       <br>
   
   CMcN-38's NixOS <br>
