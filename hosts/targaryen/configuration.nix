@@ -44,7 +44,7 @@
 
 
         # Modules:
-        ../../modules/networking.nix
+        ../../modules/networking-targaryen.nix
         ../../modules/users.nix
         ../../modules/devices.nix
         ../../modules/settings.nix

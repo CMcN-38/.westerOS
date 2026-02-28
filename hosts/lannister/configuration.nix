@@ -44,11 +44,17 @@
 
 
         # Modules:
-        ../../modules/networking.nix
+        ../../modules/networking-lannister.nix
         ../../modules/users.nix
         ../../modules/devices.nix
         ../../modules/settings.nix
         ../../modules/style.nix
     ];
+
+    console.keyMap = "dvorak";
+    services.xserver = {
+        xkb.layout = "us";
+        xkb.variant = "dvorak";
+    };
 
 }
