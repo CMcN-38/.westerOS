@@ -71,6 +71,8 @@
 
                 none-ls-nvim
 
+                obsidian-nvim
+
                 telescope-nvim
                 telescope-ui-select-nvim
 
@@ -103,6 +105,7 @@
         ${builtins.readFile ./plugins/lsp-config.lua}
         ${builtins.readFile ./plugins/mini.lua}
         ${builtins.readFile ./plugins/none-ls.lua}
+        ${builtins.readFile ./plugins/obsidian.lua}
         ${builtins.readFile ./plugins/telescope.lua}
         ${builtins.readFile ./plugins/harpoon.lua}
         vim.diagnostic.config({
