@@ -30,13 +30,13 @@ require('dashboard').setup{
                         {
                                 desc = ' Obsidian home',
                                 group = 'Number',
-                                action = 'Files ~/.config',
+                                action = 'Neotree /home/cameron/1_documents/20-29_admin/21_obsidian-vaults/21.01_Vault',
                                 key = 'o',
                         },
                         {
                                 desc = ' Obsidian Today',
                                 group = 'Number',
-                                action = 'Obisdian today',
+                                action = 'Obsidian today',
                                 key = 't',
                         },
                 },

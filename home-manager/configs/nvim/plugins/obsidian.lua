@@ -6,9 +6,25 @@ require('obsidian').setup({
         },
     },
 
-    daily_notes_dir = "/home/cameron/1_documents/20-29_admin/21_obsidian-vaults/21.01_Vault/100_Journal/110_Daily",
+    daily_notes = {
+        enabled = true,
+        folder = "100_Journal/110_Daily",
+    },
+
+    templates = {
+        enbaled = true,
+        folder = "900_Meta/920_Templates",
+    },
+
+    new_notes_dir = "",
+
+
+
     legacy_commands = false,
 })
+
+
+vim.o.conceallevel = 1
 
 vim.keymap.set('n', '<leader>of', ':Obsidian follow_link<CR>', {})
 
