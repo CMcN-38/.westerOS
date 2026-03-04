@@ -36,6 +36,7 @@ services.udev.packages = [
     btop                # tui taskmanager
     claude-code
     docker              # docker containters
+    emacs               # emacs- I know technically not terminal but close enough
     # file               
     fastfetch           # system info
     fd                  # improved find

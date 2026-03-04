@@ -38,6 +38,7 @@
     ../../home-manager/configs/tmux/config.nix
     ../../home-manager/configs/waybar/config.nix
     ../../home-manager/configs/nvim/default.nix
+    ../../home-manager/configs/emacs/config.nix
     ../../home-manager/configs/hypr/lannister.nix
     ../../home-manager/configs/zsh/lannister.nix
   ];
