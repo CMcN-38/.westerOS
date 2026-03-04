@@ -245,10 +245,10 @@ wayland.windowManager.hyprland = {
     # Autolauch
     exec-once = kitty
     exec-once = appimage-run -d /home/cameron/2_desktop/zen-specific.AppImage
-    exec-once = Cider
-    exec-once = discordcanary
+    # exec-once = Cider
+    # exec-once = discordcanary
     exec-once = obsidian
-    exec-once = transmission-gtk
+    # exec-once = transmission-gtk
     
     $osdclient = swayosd-client --monitor "$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')"
 
