@@ -9,6 +9,7 @@ require('obsidian').setup({
     daily_notes = {
         enabled = true,
         folder = "100_Journal/110_Daily",
+        template = "T_Cal_Daily"
     },
 
     templates = {

@@ -26,11 +26,12 @@
 
   environment.systemPackages = with pkgs; [
     blender                     # 3d rendering
-    calibre                     # e-book manager
+    # calibre                     # e-book manager
     discord                     # discord
     evince                      # document viewer
+    # google-chrome
     goxlr-utility               # goxlr controller
-    hypnotix                    # iptv player
+    # hypnotix                    # iptv player
     imv                         # image viewer
     kitty                       # terminal
     keymapp                     # keyboard mapping
@@ -43,7 +44,6 @@
     thonny                      # pi-zero IDE
     transmission_4-gtk          # torrent interface
     zotero                      # document manager (replacing with paperless)
-  google-chrome
   ];
 
   services.goxlr-utility.enable = true;
