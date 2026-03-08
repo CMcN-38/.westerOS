@@ -8,6 +8,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Pinned nixpkgs for Transmission 4.0.0
+    nixpkgs_tx.url = "github:NixOS/nixpkgs/a3d5c390fff47acf3f458903c2652f720a8e4316";
+
     stylix.url = "github:nix-community/stylix";
   };
 

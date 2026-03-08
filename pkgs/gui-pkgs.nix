@@ -18,13 +18,23 @@
 #╚██████╔╝╚██████╔╝██║    ██║     ██║  ██║╚██████╗██║  ██╗██║  ██║╚██████╔╝███████╗███████║
 # ╚═════╝  ╚═════╝ ╚═╝    ╚═╝     ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝
 #
-{pkgs, ...}: {
+{pkgs,
+inputs,
+...}: let
+  pkgsTx = import inputs.nixpkgs_tx {
+    inherit (pkgs) system;
+    # If you use unfree anywhere, keep this consistent:
+    config.allowUnfree = true;
+  };
+in {
   #            ┓
   #┏┓┏┓┏┓┏┓┏┓┏┓┃
   #┗┫┗ ┛┗┗ ┛ ┗┻┗
   # ┛
 
   environment.systemPackages = with pkgs; [
+    pkgsTx.transmission_4-gtk
+    # GUI packages below
     blender                     # 3d rendering
     # calibre                     # e-book manager
     discord-ptb                     # discord
@@ -44,7 +54,7 @@
     proton-pass                 # password manager
     syncthing                   # file sync
     thonny                      # pi-zero IDE
-    transmission_4-gtk          # torrent interface
+    # transmission_4-gtk          # torrent interface
     zotero                      # document manager (replacing with paperless)
   ];
 
