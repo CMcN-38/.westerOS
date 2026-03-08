@@ -15,6 +15,8 @@
     vimplug = "vim ~/.config/nvim/lua/plugins.lua";
     zshrc = "vim ~/.config/zsh/.zshrc";
 
+    emacs = "emacsclient -c -a 'emacs'";
+
     # Colorize grep output (good for log files)
     grep = "rg";
     # grep = "grep --color=auto";
@@ -146,7 +148,7 @@
     	if [ "$2" = true ] && compinit "$completion_file:1"
     }
 
-    export PATH="$HOME/.cargo/bin:$PATH"
+    export PATH="$HOME/.config/emacs/bin:$HOME/.cargo/bin:$PATH"
 
     eval "$(zoxide init --cmd cd zsh)"
   '';

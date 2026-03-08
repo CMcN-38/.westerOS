@@ -27,11 +27,13 @@
   environment.systemPackages = with pkgs; [
     blender                     # 3d rendering
     # calibre                     # e-book manager
-    discord                     # discord
+    discord-ptb                     # discord
+    # betterdiscordctl
+    # discord-canary
     evince                      # document viewer
     # google-chrome
     goxlr-utility               # goxlr controller
-    # hypnotix                    # iptv player
+    hypnotix                    # iptv player
     imv                         # image viewer
     kitty                       # terminal
     keymapp                     # keyboard mapping

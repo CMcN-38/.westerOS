@@ -67,7 +67,7 @@
     # LSP servers (add more as needed)
     nil         # Nix LSP
     rust-analyzer  # Rust LSP
-    nodePackages.pyright  # Python LSP
+    # nodePackages.pyright  # Python LSP
     nodePackages.typescript-language-server  # TS/JS LSP
     nodePackages.yaml-language-server
     nodePackages.vscode-langservers-extracted  # HTML/CSS/JSON LSP

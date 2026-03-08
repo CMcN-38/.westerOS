@@ -37,6 +37,7 @@ wayland.windowManager.hyprland = {
     exec-once = hypridle
     exec-once = thunar --daemon #Start file manager daemon in the background
     exec-once = goxlr-daemon --http-disable
+    exec-once = emac --daemon
     exec-once = solaar -w hide
     exec-once = syncthing
           # monitor=,preferred,auto,1
@@ -186,7 +187,8 @@ wayland.windowManager.hyprland = {
     bind = $mainMod, O, exec, obsidian
     bind = $mainMod, C, exec, Cider
     # bind = $mainMod, C, exec, appimage-run -d /home/cameron/2_desktop/Cider-linux-appimage-x64.AppImage
-    bind = $mainMod, D, exec, discordcanary
+    bind = $mainMod, D, exec, discordptb
+    bind = $mainMod, I, exec, GDK_BACKEND=x11 hypnotix
 
     # Move focus with mainMod + arrow keys
     bind = $mainMod, left, movefocus, l
