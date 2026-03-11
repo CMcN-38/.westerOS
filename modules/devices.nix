@@ -82,6 +82,10 @@
     #     SUBSYSTEM=="usb", ATTR{idVendor}=="1220", ATTR{idProduct}=="8fe4", TAG+="uaccess"
     #     SUBSYSTEM=="usb", ATTR{idVendor}=="1220", ATTR{idProduct}=="8fe0", TAG+="uaccess"
     # '';
+
+    swapDevices = [
+        { device = "/swap/swapfile"; }
+    ];
 #
 #    ▗▄▄▖ ▗▖   ▗▖ ▗▖▗▄▄▄▖▗▄▄▄▖▗▄▖  ▗▄▖▗▄▄▄▖▗▖ ▗▖
 #    ▐▌ ▐▌▐▌   ▐▌ ▐▌▐▌     █ ▐▌ ▐▌▐▌ ▐▌ █  ▐▌ ▐▌
