@@ -35,7 +35,7 @@
         users.cameron ={
             imports = [
                 ../hosts/${config.networking.hostName}/home-configuration.nix
-                    inputs.stylix.homeManagerModules.stylix 
+                    inputs.stylix.homeModules.stylix 
             ];
 
             stylix = {

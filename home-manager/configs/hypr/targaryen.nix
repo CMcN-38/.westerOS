@@ -111,6 +111,7 @@ wayland.windowManager.hyprland = {
     windowrule = opacity 0.95, match:class ^(zen)$
     windowrule = opacity 0.95, match:class ^(discord)$
     windowrule = opacity 0.95, match:class ^(Cider)$
+    windowrule = opacity 0.95, match:class ^(Emacs)$
     # windowrule = opacity 0.85, ^(kitty)$
     # Layer Rules
     layerrule = blur true, match:class ^(swaync)$
