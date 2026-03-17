@@ -13,9 +13,14 @@
     nixpkgs_tx.url = "github:NixOS/nixpkgs/a3d5c390fff47acf3f458903c2652f720a8e4316";
 
     stylix.url = "github:nix-community/stylix";
+
+    nix-index-database = {
+        url = "github:nix-community/nix-index-database";
+        inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+  outputs = { self, nixpkgs, home-manager, nix-index-database, ... } @ inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -26,6 +31,7 @@
         modules = [
           ./hosts/targaryen/configuration.nix
           home-manager.nixosModules.default
+          nix-index-database.nixosModules.default
         ];
       };
 
@@ -34,6 +40,7 @@
         modules = [
           ./hosts/stark/configuration.nix
           home-manager.nixosModules.default
+          nix-index-database.nixosModules.default
         ];
       };
 
@@ -42,6 +49,7 @@
         modules = [
           ./hosts/lannister/configuration.nix
           home-manager.nixosModules.default
+          nix-index-database.nixosModules.default
         ];
       };
     };
