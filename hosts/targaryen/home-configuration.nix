@@ -52,6 +52,12 @@
 
   qt.enable = true;
 
+  # Profile-sync-daemon - keeps browser profile in RAM for faster launches
+  services.psd = {
+    enable = true;
+    resyncTimer = "1h";
+  };
+
   # Configure XDG user directories - disable Desktop and Downloads
   xdg.userDirs = {
     enable = true;

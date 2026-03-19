@@ -38,7 +38,7 @@
     users.users.cameron = {
         isNormalUser = true;
         shell = pkgs.zsh;
-        extraGroups = ["wheel" "input" "dialout"];
+        extraGroups = ["wheel" "input" "dialout" "i2c"];
     };
     
     # Set default session variables for this user.

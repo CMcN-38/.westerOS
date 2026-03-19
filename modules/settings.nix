@@ -57,6 +57,15 @@
     boot.loader.systemd-boot.enable=true;
     boot.loader.efi.canTouchEfiVariables = true;
 
+    # SSD optimization - periodic TRIM
+    services.fstrim.enable = true;
+
+    # Memory management optimizations
+    boot.kernel.sysctl = {
+      "vm.swappiness" = 10;
+      "vm.vfs_cache_pressure" = 50;
+    };
+
 #    ▗▖ ▗▖▗▄▄▄ ▗▄▄▄▖▗▖  ▗▖
 #    ▐▌ ▐▌▐▌  █▐▌   ▐▌  ▐▌
 #    ▐▌ ▐▌▐▌  █▐▛▀▀▘▐▌  ▐▌

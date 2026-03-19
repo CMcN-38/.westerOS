@@ -8,12 +8,23 @@ focused_monitor="$(hyprctl monitors -j | jq -r '.[]|select(.focused==true).name'
 # Check if the focused monitor is an external monitor (not eDP)
 if [[ "$focused_monitor" != eDP* ]] && command -v ddcutil &>/dev/null; then
     # External monitor detected, use ddcutil
-    # Get the display number for this monitor
-    display_num=$(ddcutil detect --brief | grep -B1 "$focused_monitor" | grep "Display" | awk '{print $2}' | tr -d ':')
+    # Cache file for display number
+    cache_file="/tmp/westerOS_display_cache_${focused_monitor}"
 
-    if [[ -z "$display_num" ]]; then
-        # Fallback: use the first external display
-        display_num="1"
+    # Try to use cached display number
+    if [[ -f "$cache_file" ]]; then
+        display_num=$(cat "$cache_file")
+    else
+        # Cache miss - detect and cache for future use
+        display_num=$(ddcutil detect --brief | grep -B1 "$focused_monitor" | grep "Display" | awk '{print $2}' | tr -d ':')
+
+        if [[ -z "$display_num" ]]; then
+            # Fallback: use the first external display
+            display_num="1"
+        fi
+
+        # Cache the result
+        echo "$display_num" > "$cache_file"
     fi
 
     # Get current brightness
