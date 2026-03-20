@@ -186,7 +186,7 @@ wayland.windowManager.hyprland = {
     bind = $mainMod, J, togglesplit, # dwindle
     bind = $mainMod, Z, exec, $browser
     bind = $mainMod, O, exec, obsidian
-    bind = $mainMod, C, exec, Cider
+    bind = $mainMod, C, exec, westerOS_launch_cider
     # bind = $mainMod, C, exec, appimage-run -d /home/cameron/2_desktop/Cider-linux-appimage-x64.AppImage
     bind = $mainMod, D, exec, discordptb
     bind = $mainMod, I, exec, GDK_BACKEND=x11 hypnotix
