@@ -55,7 +55,7 @@
 
     environment.systemPackages = with pkgs; [
         hidapi          # C library for HID devices
-        # logiops         # Logitech options (not really used anymore)
+        logiops         # Logitech options (needed for mouse sensitivity)
     ];
 
     #External Monitor Controls
