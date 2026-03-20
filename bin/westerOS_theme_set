@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 if [[ -z $1 ]]; then
-  echo "Usage: omarchy-theme-set <theme-name>"
+  echo "Usage: themes-theme-set <theme-name>"
   exit 1
 fi
 
-CURRENT_THEME_PATH="$HOME/.omarchy/current/theme"
-NEXT_THEME_PATH="$HOME/.omarchy/current/next-theme"
-USER_THEMES_PATH="$HOME/.omarchy/themes"
-OMARCHY_THEMES_PATH="$HOME/.omarchy/themes"
+CURRENT_THEME_PATH="$HOME/.themes/current/theme"
+NEXT_THEME_PATH="$HOME/.themes/current/next-theme"
+USER_THEMES_PATH="$HOME/.themes/themes"
+OMARCHY_THEMES_PATH="$HOME/.themes/themes"
 
 THEME_NAME=$(echo "$1" | sed -E 's/<[^>]+>//g' | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
 
@@ -29,33 +29,33 @@ mkdir -p "$NEXT_THEME_PATH"
 cp -r "$THEME_PATH/"* "$NEXT_THEME_PATH/" 2>/dev/null
 
 # Generate dynamic configs
-# omarchy-theme-set-templates
+# themes-theme-set-templates
 
 # Swap next theme in as current
 rm -rf "$CURRENT_THEME_PATH"
 mv "$NEXT_THEME_PATH" "$CURRENT_THEME_PATH"
 
 # Store theme name for reference
-echo "$THEME_NAME" > "$HOME/.omarchy/current/theme.name"
+echo "$THEME_NAME" > "$HOME/.themes/current/theme.name"
 
 # Change background with theme
 westerOS_bg_next
 
 # Restart components to apply new theme
 # if pgrep -x waybar >/dev/null; then
-#   omarchy-restart-waybar
+#   themes-restart-waybar
 # fi
-# omarchy-restart-swayosd
-# omarchy-restart-terminal
-# omarchy-restart-hyprctl
-# omarchy-restart-btop
-# omarchy-restart-opencode
-# omarchy-restart-mako
+# themes-restart-swayosd
+# themes-restart-terminal
+# themes-restart-hyprctl
+# themes-restart-btop
+# themes-restart-opencode
+# themes-restart-mako
 #
 # # Change app-specific themes
-# omarchy-theme-set-gnome
-# omarchy-theme-set-browser
-# omarchy-theme-set-asusctl
+# themes-theme-set-gnome
+# themes-theme-set-browser
+# themes-theme-set-asusctl
 
 # Call hook on theme set
-# omarchy-hook theme-set "$THEME_NAME"
+# themes-hook theme-set "$THEME_NAME"
