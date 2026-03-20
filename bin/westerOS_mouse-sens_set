@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Desired DPI value
+NEW_DPI=$1
+
+# Config file path
+CONFIG="/etc/logid.cfg"
+
+if [ -z "$NEW_DPI" ]; then
+  echo "Usage: $0 <dpi>"
+  exit 1
+fi
+
+# Replace dpi value in config
+sudo sed -i -E "s/(dpi:[[:space:]]*)[0-9]+/\1$NEW_DPI/" $CONFIG
+
+# Restart logid service
+sudo systemctl restart logid
+
+echo "Mouse DPI set to $NEW_DPI and logid restarted."

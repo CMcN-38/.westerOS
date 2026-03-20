@@ -54,8 +54,8 @@
         firewall = {
             enable = true;
             trustedInterfaces = ["tailscale0"];
-            allowedUDPPorts = [config.services.tailscale.port 47392];
-            allowedTCPPorts = [22 47392 8080];
+            allowedUDPPorts = [config.services.tailscale.port 51413];
+            allowedTCPPorts = [22 51413 8080];
         };
     };
 
