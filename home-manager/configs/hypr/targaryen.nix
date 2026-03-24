@@ -30,10 +30,10 @@ wayland.windowManager.hyprland = {
           exec-once = lxqt-policykit-agent
     exec-once = waybar
     exec-once = swaync
-    exec-once = logid
+    exec-once = sudo logid
     exec-once = streamdeck -n
     # exec-once = swww-daemon #Wallpaper
-    exec-once = swaybg -i /home/cameron/.omarchy/current/background
+    exec-once = swaybg -i /home/cameron/.themes/current/background
     exec-once = hypridle
     exec-once = thunar --daemon #Start file manager daemon in the background
     exec-once = goxlr-daemon --http-disable
@@ -247,8 +247,8 @@ wayland.windowManager.hyprland = {
     # Autolauch
     exec-once = kitty
     exec-once = appimage-run -d /home/cameron/2_desktop/zen-specific.AppImage
-    exec-once = Cider
-    exec-once = discordcanary
+    exec-once = westerOS_launch_cider
+    exec-once = discordptb
     exec-once = obsidian
     exec-once = transmission-gtk
     

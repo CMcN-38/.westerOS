@@ -15,6 +15,7 @@ fi
 sudo sed -i -E "s/(dpi:[[:space:]]*)[0-9]+/\1$NEW_DPI/" $CONFIG
 
 # Restart logid service
-sudo systemctl restart logid
+# sudo systemctl restart logid
+sudo logid
 
 echo "Mouse DPI set to $NEW_DPI and logid restarted."
