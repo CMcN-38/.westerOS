@@ -81,10 +81,8 @@
     autoStart = true; # optional
   };
 
-  #     ┓•
-  #┏┓┓┏┏┫┓┏┓
-  #┗┻┗┻┗┻┗┗┛
 
-  # Enable sound.
-
+    services.upower = {
+        enable = true;
+    };
 }
