@@ -44,6 +44,15 @@
         ];
       };
 
+      nixosConfigurations.baratheon = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/baratheon/configuration.nix
+          home-manager.nixosModules.default
+          nix-index-database.nixosModules.default
+        ];
+      };
+
       nixosConfigurations.lannister = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [

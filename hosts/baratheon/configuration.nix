@@ -44,25 +44,45 @@
 
 
         # Modules:
-        ../../modules/networking-targaryen.nix
+        ../../modules/networking-baratheon.nix
         ../../modules/users.nix
-        ../../modules/devices.nix
+        ../../modules/devices-baratheon.nix
         ../../modules/settings.nix
         ../../modules/style.nix
     ];
 
     # Packages to enable yubikey use
-    environment.systemPackages = with pkgs; [
-        yubikey-manager
-        pam_u2f
-        libfido2
-    ];
+    # environment.systemPackages = with pkgs; [
+    #     yubikey-manager
+    #     pam_u2f
+    #     libfido2
+    # ];
 
-    # Yubikey Setup for sudo
-    services.pcscd.enable = true;
-    security.pam.services.sudo = {
-        unixAuth = false;
-        u2fAuth = true;
+    # Packages to enable fingerprint
+    services.fwupd.enable = true;
+    services.fprintd.enable = true;
+    # services.fprintd.tod.enable = true;
+
+    console = {
+        keyMap = "dvorak";
     };
 
+    # Yubikey Setup for sudo
+#     services.pcscd.enable = true;
+    security.polkit.enable = true;
+    security.pam.services = {
+        sudo.fprintAuth = true;
+        sudo.unixAuth = true;
+        login.fprintAuth = true;
+        login.unixAuth = true;
+        sddm.fprintAuth = true;
+    };
+    #
 }
+
+
+
+
+
+
+

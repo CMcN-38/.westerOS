@@ -39,7 +39,7 @@
     ../../home-manager/configs/waybar/config.nix
     ../../home-manager/configs/nvim/default.nix
     # ../../home-manager/configs/emacs/config.nix
-    ../../home-manager/configs/hypr/targaryen.nix
+    ../../home-manager/configs/hypr/baratheon.nix
     ../../home-manager/configs/zsh/targaryen.nix
   ];
 
@@ -49,6 +49,9 @@
   home.stateVersion = "25.11"; # Please read the comment before changing.
 
   programs.home-manager.enable = true;
+
+
+  home.keyboard.options = [ "caps:escape" ];    
 
   qt.enable = true;
 

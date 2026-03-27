@@ -30,6 +30,7 @@
 
     environment.systemPackages = with pkgs; [
         # catppuccin-sddm-corners     # sddm theme 
+        polkit_gnome
         clapper                     # play videos
         ffmpegthumbnailer           # video thumbnails
         grim                        # screenshot compontent
@@ -60,7 +61,7 @@
         })
     ];
 
-#┓       ┓     ┓
+#       ┓     ┓
 #┣┓┓┏┏┓┏┓┃┏┓┏┓┏┫
 #┛┗┗┫┣┛┛ ┗┗┻┛┗┗┻
 #   ┛┛
@@ -77,6 +78,12 @@
         extraPackages = with pkgs; [
             kdePackages.qt5compat      # provides Qt5Compat modules
         ];
+    };
+
+    services.xserver = {
+        enable = true;
+        layout = "us";
+        xkbVariant = "dvorak";
     };
 
     programs.thunar.enable = true;        # File Browser
