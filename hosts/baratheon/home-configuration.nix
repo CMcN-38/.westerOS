@@ -61,6 +61,33 @@
     resyncTimer = "1h";
   };
 
+  # WesterOS Battery Monitor - alerts when battery is low
+  systemd.user.services.westerOS-battery-monitor = {
+    Unit = {
+      Description = "WesterOS Battery Monitor";
+      Documentation = "https://github.com/cameronraysmith/westerOS";
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${config.home.homeDirectory}/.westerOS/bin/westerOS_battery_monitor";
+    };
+  };
+
+  systemd.user.timers.westerOS-battery-monitor = {
+    Unit = {
+      Description = "Run WesterOS Battery Monitor every 2 minutes";
+      Documentation = "https://github.com/cameronraysmith/westerOS";
+    };
+    Timer = {
+      OnBootSec = "1min";
+      OnUnitActiveSec = "2min";
+      Persistent = true;
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
+    };
+  };
+
   # Configure XDG user directories - disable Desktop and Downloads
   xdg.userDirs = {
     enable = true;
