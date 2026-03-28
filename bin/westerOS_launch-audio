@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Launch the westerOS audio controls TUI (provided by wiremix).
+
+westerOS_launch-or-focus-tui wiremix

@@ -1,0 +1,7 @@
+#!/usr/bin/env
+
+# Launch the westerOS bluetooth controls TUI (provided by bluetui).
+# Also attempts to unblock bluetooth service if rfkill had blocked it.
+
+rfkill unblock bluetooth
+exec westerOS_launch-or-focus-tui bluetui

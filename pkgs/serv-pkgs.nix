@@ -68,6 +68,7 @@
     rustc
     tesseract4
     tree-sitter
+    uwsm
 
     wireguard-tools
     wgnord
