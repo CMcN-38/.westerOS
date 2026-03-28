@@ -264,6 +264,9 @@ wayland.windowManager.hyprland = {
     bindeld = ,XF86MonBrightnessUp, Brightness up, exec, westerOS_brightness_display +10%
     bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display 10%-
 
+    # Battery Saver Mode
+    bind = $mainMod SHIFT, B, exec, westerOS_battery_saver_toggle
+
     # bindeld = ,XF86AudioPlay, exec, $osdclient --playerctl play-pause
         '';
 };

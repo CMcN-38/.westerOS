@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Battery Saver Mode - Status Script
+# Returns status for use in other scripts.
+
+STATE_FLAG="/run/user/$UID/westerOS_battery_saver"
+
+if [ -f "$STATE_FLAG" ]; then
+    echo "enabled"
+    exit 0
+else
+    echo "disabled"
+    exit 1
+fi

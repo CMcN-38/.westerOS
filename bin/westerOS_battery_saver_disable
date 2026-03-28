@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# Battery Saver Mode - Disable Script
+# Restores all settings to their previous values.
+
+STATE_DIR="/run/user/$UID"
+STATE_FLAG="$STATE_DIR/westerOS_battery_saver"
+
+# Check if currently enabled
+if [ ! -f "$STATE_FLAG" ]; then
+    notify-send "Battery Saver" "Not currently enabled" -i battery
+    exit 0
+fi
+
+# Restore brightness
+if [ -f "$STATE_DIR/westerOS_battery_saver_brightness" ]; then
+    SAVED_BRIGHTNESS=$(cat "$STATE_DIR/westerOS_battery_saver_brightness")
+    brightnessctl -d amdgpu_bl1 set "$SAVED_BRIGHTNESS" > /dev/null 2>&1
+    rm "$STATE_DIR/westerOS_battery_saver_brightness"
+fi
+
+# Restore refresh rate
+if [ -f "$STATE_DIR/westerOS_battery_saver_refresh" ]; then
+    SAVED_REFRESH=$(cat "$STATE_DIR/westerOS_battery_saver_refresh")
+    # Convert float to int if needed (e.g., 120.000000 -> 120)
+    SAVED_REFRESH=$(echo "$SAVED_REFRESH" | cut -d. -f1)
+    hyprctl keyword monitor eDP-1,2880x1920@${SAVED_REFRESH},0x0,1.5 > /dev/null 2>&1
+    rm "$STATE_DIR/westerOS_battery_saver_refresh"
+fi
+
+# Restore CPU max frequency
+if [ -f "$STATE_DIR/westerOS_battery_saver_cpu_max" ]; then
+    SAVED_CPU_MAX=$(cat "$STATE_DIR/westerOS_battery_saver_cpu_max")
+    for policy in /sys/devices/system/cpu/cpufreq/policy*; do
+        echo "$SAVED_CPU_MAX" | sudo tee "$policy/scaling_max_freq" > /dev/null 2>&1
+    done
+    rm "$STATE_DIR/westerOS_battery_saver_cpu_max"
+fi
+
+# Remove state flag
+rm "$STATE_FLAG"
+
+# Show notification
+notify-send "󰁹 Battery Saver Disabled" "Normal power mode restored" -i battery-full

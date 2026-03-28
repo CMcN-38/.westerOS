@@ -77,6 +77,28 @@
         login.unixAuth = true;
         sddm.fprintAuth = true;
     };
+
+    # Battery Saver Mode - Sudo permissions
+    security.sudo.extraRules = [
+        {
+            users = [ "cameron" ];
+            commands = [
+                {
+                    command = "/run/current-system/sw/bin/tee /sys/class/leds/chromeos::kbd_backlight/brightness";
+                    options = [ "NOPASSWD" ];
+                }
+            ];
+        }
+        {
+            users = [ "cameron" ];
+            commands = [
+                {
+                    command = "/run/current-system/sw/bin/tee /sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq";
+                    options = [ "NOPASSWD" ];
+                }
+            ];
+        }
+    ];
     #
 }
 

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+# Waybar Battery Integration Script
+# Outputs JSON with battery info and battery saver status.
+
+# Get battery information from upower
+BATTERY_PATH=$(upower -e | grep BAT)
+BATTERY_INFO=$(upower -i "$BATTERY_PATH")
+
+# Extract battery percentage
+PERCENTAGE=$(echo "$BATTERY_INFO" | grep "percentage:" | awk '{print $2}' | tr -d '%')
+
+# Extract battery state
+STATE=$(echo "$BATTERY_INFO" | grep "state:" | awk '{print $2}')
+
+# Extract time remaining (if available)
+TIME_TO_EMPTY=$(echo "$BATTERY_INFO" | grep "time to empty:" | sed 's/.*time to empty: *//')
+TIME_TO_FULL=$(echo "$BATTERY_INFO" | grep "time to full:" | sed 's/.*time to full: *//')
+
+# Check battery saver status
+STATE_FLAG="/run/user/$UID/westerOS_battery_saver"
+if [ -f "$STATE_FLAG" ]; then
+    SAVER_STATUS="ON"
+    SAVER_CLASS="saver-enabled"
+else
+    SAVER_STATUS="OFF"
+    SAVER_CLASS=""
+fi
+
+# Determine battery icon based on percentage and state
+if [ "$STATE" = "charging" ] || [ "$STATE" = "fully-charged" ]; then
+    if [ "$PERCENTAGE" -ge 90 ]; then
+        ICON="󰂅"
+    elif [ "$PERCENTAGE" -ge 80 ]; then
+        ICON="󰂋"
+    elif [ "$PERCENTAGE" -ge 60 ]; then
+        ICON="󰂊"
+    elif [ "$PERCENTAGE" -ge 40 ]; then
+        ICON="󰢞"
+    elif [ "$PERCENTAGE" -ge 20 ]; then
+        ICON="󰂆"
+    else
+        ICON="󰢜"
+    fi
+else
+    if [ "$PERCENTAGE" -ge 90 ]; then
+        ICON="󰁹"
+    elif [ "$PERCENTAGE" -ge 80 ]; then
+        ICON="󰂂"
+    elif [ "$PERCENTAGE" -ge 60 ]; then
+        ICON="󰂀"
+    elif [ "$PERCENTAGE" -ge 40 ]; then
+        ICON="󰁾"
+    elif [ "$PERCENTAGE" -ge 20 ]; then
+        ICON="󰁼"
+    else
+        ICON="󰁺"
+    fi
+fi
+
+# Build tooltip
+TOOLTIP="Battery: ${PERCENTAGE}% (${STATE})"
+if [ -n "$TIME_TO_EMPTY" ] && [ "$STATE" = "discharging" ]; then
+    TOOLTIP="${TOOLTIP}\nTime remaining: ${TIME_TO_EMPTY}"
+elif [ -n "$TIME_TO_FULL" ] && [ "$STATE" = "charging" ]; then
+    TOOLTIP="${TOOLTIP}\nTime to full: ${TIME_TO_FULL}"
+fi
+TOOLTIP="${TOOLTIP}\nBattery Saver: ${SAVER_STATUS}"
+
+# Output JSON
+jq -n \
+    --arg text "${ICON} ${PERCENTAGE}%" \
+    --arg tooltip "$TOOLTIP" \
+    --arg class "$SAVER_CLASS" \
+    '{text: $text, tooltip: $tooltip, class: $class}'

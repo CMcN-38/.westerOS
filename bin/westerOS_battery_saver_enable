@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Battery Saver Mode - Enable Script
+# Reduces power consumption by dimming screen, disabling keyboard backlight,
+# reducing refresh rate, and limiting CPU frequency.
+
+STATE_DIR="/run/user/$UID"
+STATE_FLAG="$STATE_DIR/westerOS_battery_saver"
+
+# Check if already enabled
+if [ -f "$STATE_FLAG" ]; then
+    notify-send "Battery Saver" "Already enabled" -i battery
+    exit 0
+fi
+
+# Save current brightness
+CURRENT_BRIGHTNESS=$(brightnessctl -d amdgpu_bl1 get)
+echo "$CURRENT_BRIGHTNESS" > "$STATE_DIR/westerOS_battery_saver_brightness"
+
+# Save current refresh rate
+CURRENT_REFRESH=$(hyprctl monitors -j | jq -r '.[0].refreshRate')
+echo "$CURRENT_REFRESH" > "$STATE_DIR/westerOS_battery_saver_refresh"
+
+# Save current CPU max frequency (using policy0 as reference)
+CURRENT_CPU_MAX=$(cat /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq)
+echo "$CURRENT_CPU_MAX" > "$STATE_DIR/westerOS_battery_saver_cpu_max"
+
+# Apply power-saving measures
+
+# 1. Reduce screen brightness to 30%
+brightnessctl -d amdgpu_bl1 set 30% > /dev/null 2>&1
+
+# 3. Set display refresh rate to 60Hz
+hyprctl keyword monitor eDP-1,2880x1920@60,0x0,1.5 > /dev/null 2>&1
+
+# 4. Limit CPU frequency to 70% of max
+TARGET_CPU_FREQ=$(echo "$CURRENT_CPU_MAX * 0.7" | bc | cut -d. -f1)
+for policy in /sys/devices/system/cpu/cpufreq/policy*; do
+    echo "$TARGET_CPU_FREQ" | sudo tee "$policy/scaling_max_freq" > /dev/null 2>&1
+done
+
+# Create state flag
+touch "$STATE_FLAG"
+
+# Show notification
+notify-send "󰂃 Battery Saver Enabled" "Power-saving mode active" -i battery-low
