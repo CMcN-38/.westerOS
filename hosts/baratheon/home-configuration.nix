@@ -79,7 +79,7 @@
       Documentation = "https://github.com/cameronraysmith/westerOS";
     };
     Timer = {
-      OnBootSec = "1min";
+      OnStartupSec = "1min";
       OnUnitActiveSec = "2min";
       Persistent = true;
     };
