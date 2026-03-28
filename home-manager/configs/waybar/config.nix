@@ -46,7 +46,7 @@
                         "cpu"
                         "memory"
                         # "network#wifi"
-                        "custom/battery"
+                        "battery"
                         "pulseaudio"
                         "clock"
                         "custom/notification"
@@ -148,11 +148,21 @@
                     "escape" = true;
                 };
 
-                # Battery with Battery Saver integration
-                "custom/battery" = {
-                    "exec" = "westerOS_waybar_battery";
-                    "interval" = 5;
-                    "return-type" = "json";
+                # Battery
+                "battery" = {
+                    "states" = {
+                        "warning" = 30;
+                        "critical" = 15;
+                    };
+                    "format" = "{icon} {capacity}%";
+                    "format-charging" = "{icon} {capacity}%";
+                    "format-plugged" = "{icon} {capacity}%";
+                    "format-icons" = {
+                        "charging" = ["󰢜" "󰂆" "󰂇" "󰢞" "󰂊" "󰢝" "󰂅"];
+                        "plugged" = "󰚥";
+                        "default" = ["󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
+                    };
+                    "tooltip" = "Battery: {capacity}% ({status})\n{timeTo}";
                     "on-click" = "westerOS_battery_saver_toggle";
                 };
             };
@@ -319,7 +329,7 @@ margin: 5px;
 padding: 2px 10px;
 }
 
-#custom-battery {
+#battery {
 color: #15161e;
 background: #eba0ac;
             border-radius: 15px;
@@ -327,9 +337,17 @@ margin: 5px;
 padding: 2px 10px;
 }
 
-#custom-battery.saver-enabled {
+#battery.warning {
 color: #15161e;
 background: #f9e2af;
+            border-radius: 15px;
+margin: 5px;
+padding: 2px 10px;
+}
+
+#battery.critical {
+color: #15161e;
+background: #f38ba8;
             border-radius: 15px;
 margin: 5px;
 padding: 2px 10px;

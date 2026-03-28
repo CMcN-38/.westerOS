@@ -27,6 +27,7 @@
   environment.systemPackages = with pkgs; [
     appimage-run
     apprun-cli
+    bc
     brightnessctl
     cargo
     clang_18
