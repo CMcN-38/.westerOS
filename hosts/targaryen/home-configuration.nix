@@ -26,6 +26,7 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }: {
   imports = [

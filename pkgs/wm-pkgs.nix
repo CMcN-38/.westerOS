@@ -39,7 +39,6 @@
         lxqt.pavucontrol-qt         # audio control component
         pwvucontrol                 # audio control component
         rofi-unwrapped              # app launcher
-        walker                      # alternate app launcher
         gradia                      # AIO Screenshot (currently not working)
         slurp                       # screenshot component
         swappy                      # screenshot component

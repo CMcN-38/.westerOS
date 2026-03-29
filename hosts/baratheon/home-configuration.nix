@@ -26,6 +26,7 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }: {
   imports = [
@@ -41,6 +42,9 @@
     # ../../home-manager/configs/emacs/config.nix
     ../../home-manager/configs/hypr/baratheon.nix
     ../../home-manager/configs/zsh/targaryen.nix
+
+    inputs.walker.homeManagerModules.default    
+
   ];
 
   home.username = "cameron";
@@ -60,6 +64,10 @@
     enable = true;
     resyncTimer = "1h";
   };
+
+    
+  programs.walker.enable = true;
+
 
   # WesterOS Battery Monitor - alerts when battery is low
   systemd.user.services.westerOS-battery-monitor = {

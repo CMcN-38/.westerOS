@@ -18,9 +18,17 @@
         url = "github:nix-community/nix-index-database";
         inputs.nixpkgs.follows = "nixpkgs";
     };
+    
+    # Walker app selector setup
+    elephant.url = "github:abenz1267/elephant";
+
+    walker = {
+        url = "github:abenz1267/walker";
+        inputs.elephant.follows = "elephant";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-index-database, ... } @ inputs:
+  outputs = { self, nixpkgs, home-manager, nix-index-database, walker, ... } @ inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};

@@ -32,10 +32,11 @@
 }: {
 
     home-manager = {
+        extraSpecialArgs = { inherit inputs; };
         users.cameron ={
             imports = [
                 ../hosts/${config.networking.hostName}/home-configuration.nix
-                    inputs.stylix.homeModules.stylix 
+                    inputs.stylix.homeModules.stylix
             ];
 
             stylix = {
