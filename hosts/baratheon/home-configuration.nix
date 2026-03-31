@@ -73,7 +73,7 @@
   systemd.user.services.westerOS-battery-monitor = {
     Unit = {
       Description = "WesterOS Battery Monitor";
-      Documentation = "https://github.com/cameronraysmith/westerOS";
+      Documentation = "https://github.com/cmcn-38/.westerOS";
     };
     Service = {
       Type = "oneshot";
@@ -84,7 +84,7 @@
   systemd.user.timers.westerOS-battery-monitor = {
     Unit = {
       Description = "Run WesterOS Battery Monitor every 2 minutes";
-      Documentation = "https://github.com/cameronraysmith/westerOS";
+      Documentation = "https://github.com/cmcn-38/.westerOS";
     };
     Timer = {
       OnStartupSec = "1min";

@@ -42,6 +42,9 @@
     # ../../home-manager/configs/emacs/config.nix
     ../../home-manager/configs/hypr/targaryen.nix
     ../../home-manager/configs/zsh/targaryen.nix
+    ../../home-manager/configs/walker/config.nix
+
+    inputs.walker.homeManagerModules.default    
   ];
 
   home.username = "cameron";
