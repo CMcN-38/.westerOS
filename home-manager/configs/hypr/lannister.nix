@@ -259,6 +259,9 @@ wayland.windowManager.hyprland = {
     bindeld = ,XF86MonBrightnessUp, Brightness up, exec, westerOS_brightness_display +10%
     bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display 10%-
 
+    bindle = SHIFT, XF86MonBrightnessUp, exec, westerOS_brightness_kbd up
+    bindle = SHIFT, XF86MonBrightnessDown, exec, westerOS_brightness_kbd down
+
     # bindeld = ,XF86AudioPlay, exec, $osdclient --playerctl play-pause
         '';
 };
@@ -277,11 +280,13 @@ wayland.windowManager.hyprland = {
                                 {
                                         timeout = 300;
                                         on-timeout = "hyprlock";
+                                        condition = "! westerOS_check_audio";
                                 }
                                 {
                                         timeout = 600;
                                         on-timeout = "hyprctl dispatch dpms off";
                                         on-resume = "hyprctl dispatch dpms on";
+                                        condition = "! westerOS_check_audio";
                                 }
                         ];
                 };

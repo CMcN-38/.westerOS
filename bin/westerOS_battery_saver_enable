@@ -17,6 +17,10 @@ fi
 CURRENT_BRIGHTNESS=$(brightnessctl -d amdgpu_bl1 get)
 echo "$CURRENT_BRIGHTNESS" > "$STATE_DIR/westerOS_battery_saver_brightness"
 
+# Save current keyboard backlight
+CURRENT_KBD_BACKLIGHT=$(brightnessctl -d chromeos::kbd_backlight get)
+echo "$CURRENT_KBD_BACKLIGHT" > "$STATE_DIR/westerOS_battery_saver_kbd_backlight"
+
 # Save current refresh rate
 CURRENT_REFRESH=$(hyprctl monitors -j | jq -r '.[0].refreshRate')
 echo "$CURRENT_REFRESH" > "$STATE_DIR/westerOS_battery_saver_refresh"
@@ -29,6 +33,9 @@ echo "$CURRENT_CPU_MAX" > "$STATE_DIR/westerOS_battery_saver_cpu_max"
 
 # 1. Reduce screen brightness to 30%
 brightnessctl -d amdgpu_bl1 set 30% > /dev/null 2>&1
+
+# 2. Turn off keyboard backlight
+brightnessctl -d chromeos::kbd_backlight set 0% > /dev/null 2>&1
 
 # 3. Set display refresh rate to 60Hz
 hyprctl keyword monitor eDP-1,2880x1920@60,0x0,1.5 > /dev/null 2>&1

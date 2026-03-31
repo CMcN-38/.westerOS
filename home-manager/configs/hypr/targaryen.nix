@@ -279,11 +279,13 @@ wayland.windowManager.hyprland = {
                                 {
                                         timeout = 300;
                                         on-timeout = "hyprlock";
+                                        condition = "! westerOS_check_audio";
                                 }
                                 {
                                         timeout = 600;
                                         on-timeout = "hyprctl dispatch dpms off";
                                         on-resume = "hyprctl dispatch dpms on";
+                                        condition = "! westerOS_check_audio";
                                 }
                         ];
                 };

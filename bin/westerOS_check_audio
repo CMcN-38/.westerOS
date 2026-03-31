@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Check if any audio is currently playing (not corked/paused)
+# Returns 0 (success) if audio is playing, 1 if not
+
+# Try to find pactl in common locations
+PACTL=""
+for path in \
+    "$(command -v pactl 2>/dev/null)" \
+    "/run/current-system/sw/bin/pamixer" \
+    "/nix/store/*/bin/pamixer"; do
+    if [ -x "$path" ] 2>/dev/null; then
+        PACTL="$path"
+        break
+    fi
+done
+
+$PACTL sink-inputs 2>/dev/null | grep -q "Running"
+# If pactl not found, exit with error
+if [ -z "$PACTL" ]; then
+    exit 1
+fi
+
+# Check if any sink input is not corked (i.e., audio is playing)
+$PACTL sink-inputs 2>/dev/null | grep -q "Running"

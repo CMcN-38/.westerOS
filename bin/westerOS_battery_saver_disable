@@ -19,6 +19,13 @@ if [ -f "$STATE_DIR/westerOS_battery_saver_brightness" ]; then
     rm "$STATE_DIR/westerOS_battery_saver_brightness"
 fi
 
+# Restore keyboard backlight
+if [ -f "$STATE_DIR/westerOS_battery_saver_kbd_backlight" ]; then
+    SAVED_KBD_BACKLIGHT=$(cat "$STATE_DIR/westerOS_battery_saver_kbd_backlight")
+    brightnessctl -d chromeos::kbd_backlight set "$SAVED_KBD_BACKLIGHT" > /dev/null 2>&1
+    rm "$STATE_DIR/westerOS_battery_saver_kbd_backlight"
+fi
+
 # Restore refresh rate
 if [ -f "$STATE_DIR/westerOS_battery_saver_refresh" ]; then
     SAVED_REFRESH=$(cat "$STATE_DIR/westerOS_battery_saver_refresh")
