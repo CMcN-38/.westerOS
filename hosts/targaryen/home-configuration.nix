@@ -73,4 +73,26 @@
     download = "${config.home.homeDirectory}/3_downloads";
 
   };
+
+  # Zen Browser desktop entry
+  xdg.desktopEntries.zen-browser = {
+    name = "Zen Browser";
+    genericName = "Web Browser";
+    exec = "appimage-run -d ${config.home.homeDirectory}/2_desktop/zen-specific.AppImage %U";
+    terminal = false;
+    categories = [ "Application" "Network" "WebBrowser" ];
+    mimeType = [ "text/html" "text/xml" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+  };
+
+  # Set Zen as default browser
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "zen-browser.desktop";
+      "x-scheme-handler/http" = "zen-browser.desktop";
+      "x-scheme-handler/https" = "zen-browser.desktop";
+      "x-scheme-handler/about" = "zen-browser.desktop";
+      "x-scheme-handler/unknown" = "zen-browser.desktop";
+    };
+  };
 }
