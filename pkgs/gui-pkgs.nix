@@ -42,8 +42,8 @@ in {
     # discord-canary
     evince                      # document viewer
     # google-chrome
+    firefox
     goxlr-utility               # goxlr controller
-    hypnotix                    # iptv player
     imv                         # image viewer
     kitty                       # terminal
     keymapp                     # keyboard mapping
