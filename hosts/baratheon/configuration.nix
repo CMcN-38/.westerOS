@@ -49,6 +49,7 @@
         ../../modules/devices-baratheon.nix
         ../../modules/settings.nix
         ../../modules/style.nix
+        ../../modules/fan-control.nix
     ];
 
     # Packages to enable yubikey use
