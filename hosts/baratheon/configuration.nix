@@ -49,6 +49,7 @@
         ../../modules/devices-baratheon.nix
         ../../modules/settings.nix
         ../../modules/style.nix
+        ../../modules/fan-control.nix
     ];
 
     # Packages to enable yubikey use
@@ -67,11 +68,10 @@
         keyMap = "dvorak";
     };
 
-    services.xserver = {
-        enable = true;
-        layout = "us";
-        xkbVariant = "dvorak";
-    };
+    # Disable WiFi power management for better signal stability (MT7925 chipset)
+    boot.extraModprobeConfig = ''
+      options mt7925e power_save=0
+    '';
 
     # Yubikey Setup for sudo
 #     services.pcscd.enable = true;

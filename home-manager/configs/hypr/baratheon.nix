@@ -77,7 +77,7 @@ wayland.windowManager.hyprland = {
 
     windowrule = float true, match:class thunar
     windowrule = center true, match:class thunar
-    windowrule = size 2500 1000, match:class thunar
+    windowrule = size  60% 50%, match:class thunar
 
     #Pulse Audio
     # windowrule = float, class:^(org.pulseaudio.pavucontrol)$, 
@@ -111,6 +111,7 @@ wayland.windowManager.hyprland = {
     windowrule = opacity 0.95, match:class ^(firefox)$
     # windowrule = opacity 1, match:class ^(Zen Browser)$
     windowrule = opacity 0.95, match:class ^(zen)$
+    windowrule = opacity 1, match:title ^(.*YouTube.*)$
     windowrule = opacity 0.95, match:class ^(discord)$
     windowrule = opacity 0.95, match:class ^(Cider)$
     windowrule = opacity 0.95, match:class ^(Emacs)$
@@ -264,8 +265,8 @@ wayland.windowManager.hyprland = {
     bindeld = ,XF86MonBrightnessUp, Brightness up, exec, westerOS_brightness_display +10%
     bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display 10%-
 
-    bindle = SHIFT, XF86MonBrightnessUp, exec, westerOS_brightness_kbd up
-    bindle = SHIFT, XF86MonBrightnessDown, exec, westerOS_brightness_kbd down
+    binde = SHIFT, XF86MonBrightnessUp, exec, westerOS_brightness_kbd up
+    binde = SHIFT, XF86MonBrightnessDown, exec, westerOS_brightness_kbd down
 
     # Battery Saver Mode
     bind = $mainMod SHIFT, B, exec, westerOS_battery_saver_toggle

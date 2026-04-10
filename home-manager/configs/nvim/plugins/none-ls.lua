@@ -11,7 +11,7 @@ null_ls.setup({
                 -- null_ls.builtins.formatting.rustfmt,
                 --Nix
                 null_ls.builtins.formatting.alejandra,
-                null_ls.builtins.diagnostics.statix,
+                -- null_ls.builtins.diagnostics.statix,
                 -- null_ls.builtins.diagnostics.deadnix,
 
         },

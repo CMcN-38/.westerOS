@@ -39,16 +39,19 @@
 
     networking = {
         hostName = "baratheon";
-        
+
         # Configure the IP address
         networkmanager.enable = true;
         useDHCP = false;
-        interfaces.wlp2s0.ipv4.addresses = [{
+        interfaces.wlp192s0.ipv4.addresses = [{
             address = "192.168.0.123";
             prefixLength = 24;
         }];
         defaultGateway = "192.168.4.1";
         nameservers = ["8.8.8.8"];
+
+        # Disable WiFi power management to improve signal stability (MT7925 chipset)
+        networkmanager.wifi.powersave = false;
 
         # Enable the firewall but open necessary ports for tailscale, ssh, and transmission.
         firewall = {
