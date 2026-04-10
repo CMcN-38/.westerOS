@@ -36,13 +36,23 @@ in {
     pkgsTx.transmission_4-gtk
     # GUI packages below
     blender                     # 3d rendering
-    # calibre                     # e-book manager
+    (pkgs.symlinkJoin {           # e-book manager (wrapped to isolate from system Qt env — calibre bundles its own Qt)
+      name = "calibre";
+      paths = [ pkgs.calibre ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/calibre \
+          --unset QT_STYLE_OVERRIDE \
+          --unset QT_QPA_PLATFORMTHEME \
+          --set QT_QPA_PLATFORM xcb
+      '';
+    })
+    catppuccin-kvantum
     discord-ptb                     # discord
     # betterdiscordctl
     # discord-canary
     evince                      # document viewer
     # google-chrome
-    firefox
     goxlr-utility               # goxlr controller
     imv                         # image viewer
     kitty                       # terminal

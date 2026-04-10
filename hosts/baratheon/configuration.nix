@@ -67,6 +67,12 @@
         keyMap = "dvorak";
     };
 
+    services.xserver = {
+        enable = true;
+        layout = "us";
+        xkbVariant = "dvorak";
+    };
+
     # Yubikey Setup for sudo
 #     services.pcscd.enable = true;
     security.polkit.enable = true;

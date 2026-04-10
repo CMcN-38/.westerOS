@@ -58,11 +58,20 @@
         libfido2
     ];
 
+    services.xserver = {
+        enable = true;
+        layout = "us";
+    };
+
     # Yubikey Setup for sudo
     services.pcscd.enable = true;
-    security.pam.services.sudo = {
-        unixAuth = false;
-        u2fAuth = true;
+    security.pam.services = {
+        sudo = {
+            unixAuth = false;
+            u2fAuth = true;
+        };
+        login.unixAuth = true;  # Enable password login
+        sddm.unixAuth = true;   # Enable password for SDDM
     };
 
 }

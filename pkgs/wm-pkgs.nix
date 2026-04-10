@@ -80,11 +80,6 @@
         ];
     };
 
-    services.xserver = {
-        enable = true;
-        layout = "us";
-        xkbVariant = "dvorak";
-    };
 
     programs.thunar.enable = true;        # File Browser
         programs.xfconf.enable = true;
