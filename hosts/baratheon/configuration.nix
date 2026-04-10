@@ -68,6 +68,11 @@
         keyMap = "dvorak";
     };
 
+    # Disable WiFi power management for better signal stability (MT7925 chipset)
+    boot.extraModprobeConfig = ''
+      options mt7925e power_save=0
+    '';
+
     # Yubikey Setup for sudo
 #     services.pcscd.enable = true;
     security.polkit.enable = true;
