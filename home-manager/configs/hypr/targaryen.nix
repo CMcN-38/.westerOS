@@ -109,6 +109,7 @@ wayland.windowManager.hyprland = {
     windowrule = opacity 0.95, match:class ^(firefox)$
     # windowrule = opacity 1, match:class ^(Zen Browser)$
     windowrule = opacity 0.95, match:class ^(zen)$
+    windowrule = opacity 1, match:title ^(.*YouTube.*)$
     windowrule = opacity 0.95, match:class ^(discord)$
     windowrule = opacity 0.95, match:class ^(Cider)$
     windowrule = opacity 0.95, match:class ^(Emacs)$

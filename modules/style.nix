@@ -32,6 +32,7 @@
 }: {
 
     home-manager = {
+        backupFileExtension = "bak";
         extraSpecialArgs = { inherit inputs; };
         users.cameron ={
             imports = [

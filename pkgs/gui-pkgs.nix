@@ -58,6 +58,9 @@ in {
     kitty                       # terminal
     keymapp                     # keyboard mapping
     localsend                   # local file sending
+    
+    jetbrains.rust-rover
+
     mpv                         # multimedia player
     obsidian                    # pkm notes
     obs-studio                  # screen recording
