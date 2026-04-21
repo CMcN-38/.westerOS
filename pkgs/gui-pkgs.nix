@@ -59,7 +59,7 @@ in {
     keymapp                     # keyboard mapping
     localsend                   # local file sending
     
-    jetbrains.rust-rover
+    jetbrains-toolbox
 
     mpv                         # multimedia player
     obsidian                    # pkm notes

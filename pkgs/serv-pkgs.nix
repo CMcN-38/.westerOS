@@ -29,7 +29,7 @@
     apprun-cli
     bc
     brightnessctl
-    cargo
+    # cargo
     clang_18
     ddcutil
     espanso-wayland
@@ -66,7 +66,8 @@
     libsForQt5.qt5.qtsvg
     libsForQt5.qt5.qtquickcontrols
     libadwaita
-    rustc
+    # rustc
+    rustup
     tesseract4
     tree-sitter
     uwsm
