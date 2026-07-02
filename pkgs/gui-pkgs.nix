@@ -58,6 +58,7 @@ in {
     kitty                       # terminal
     keymapp                     # keyboard mapping
     localsend                   # local file sending
+    protonmail-bridge
     
     jetbrains-toolbox
 
