@@ -33,6 +33,8 @@
     openmoji-color
     freefont_ttf
     nerd-fonts.fira-code
+    symbola
+    nerd-fonts.symbols-only
   ];
   
 }

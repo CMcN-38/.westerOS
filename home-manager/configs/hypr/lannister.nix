@@ -105,8 +105,8 @@ wayland.windowManager.hyprland = {
     windowrule = workspace 9, match:class transmission-gtk
 
     # Transparency Rules
-    # windowrule = match:opacity 1, match:class ^(firefox)$
-    windowrule = opacity 0.95, match:class ^(firefox)$
+    windowrule = match:opacity 1, match:class ^(firefox)$
+    # windowrule = opacity 0.95, match:class ^(firefox)$
     # windowrule = opacity 1, match:class ^(Zen Browser)$
     windowrule = opacity 0.95, match:class ^(zen)$
     windowrule = opacity 0.95, match:class ^(discord)$

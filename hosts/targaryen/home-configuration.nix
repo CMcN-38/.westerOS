@@ -39,7 +39,7 @@
     ../../home-manager/configs/tmux/config.nix
     ../../home-manager/configs/waybar/config.nix
     ../../home-manager/configs/nvim/default.nix
-    # ../../home-manager/configs/emacs/config.nix
+    ../../home-manager/configs/emacs/config.nix
     ../../home-manager/configs/hypr/targaryen.nix
     ../../home-manager/configs/zsh/targaryen.nix
     ../../home-manager/configs/walker/config.nix

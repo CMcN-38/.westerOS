@@ -31,6 +31,7 @@
     brightnessctl
     # cargo
     clang_18
+    cmake
     ddcutil
     espanso-wayland
     gccgo13
@@ -77,6 +78,20 @@
     wl-clipboard
     zig
     zsa-udev-rules
+
+    # Emacs tools — LSP servers, formatters, and runtime dependencies
+    nil                                          # Nix LSP
+    rust-analyzer                                # Rust LSP
+    nodePackages.typescript-language-server      # TS/JS LSP
+    nodePackages.yaml-language-server            # YAML LSP
+    nodePackages.vscode-langservers-extracted    # HTML/CSS/JSON LSP
+    nodePackages.prettier                        # Multi-language formatter
+    black                                        # Python formatter
+    sqlite                                       # org-roam database
+    graphviz                                     # org-mode diagram rendering
+    pandoc                                       # document conversion
+    gnumake                                      # vterm native module build
+    libtool                                      # vterm native module build
   ];
 
   programs.streamdeck-ui = {
