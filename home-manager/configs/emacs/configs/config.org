@@ -25,11 +25,15 @@
   - [[#backup][Backup]]
   - [[#dired][Dired]]
   - [[#neotree][NeoTree]]
+- [[#imenu][IMENU]]
 - [[#ivy-counsel][IVY (COUNSEL)]]
 - [[#language-support][LANGUAGE SUPPORT]]
   - [[#enable-languages][Enable Languages]]
   - [[#flycheck][Flycheck]]
   - [[#company][Company]]
+- [[#media][MEDIA]]
+  - [[#emms][Emms]]
+  - [[#eradio][Eradio]]
 - [[#org-mode][ORG MODE]]
   - [[#org-tasks][Org Tasks]]
   - [[#enable-toc][Enable ToC]]
@@ -37,6 +41,8 @@
   - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#org-level-headers][Org Level Headers]]
   - [[#enable-org-tempo][Enable Org Tempo]]
+  - [[#org-auto-tangle][Org Auto Tangle]]
+  - [[#org-roam][Org Roam]]
 - [[#perspective][PERSPECTIVE]]
 - [[#pomodoro][POMODORO]]
 - [[#shells-and-terminals][SHELLS AND TERMINALS]]
@@ -65,6 +71,8 @@
   (electric-indent-mode -1)
   (electric-pair-mode 0)
   (global-auto-revert-mode t)
+  (setq bookmark-default-file "~/.config/emacs/bookmarks")
+  (bookmark-load bookmark-default-file t)
 #+end_src
 
 * EVIL MODE
@@ -99,7 +107,7 @@
   (use-package evil-collection :ensure t :demand t
     :after evil
     :config
-    (setq evil-collection-mode-list `(dasboard dired ibuffer))
+    (setq evil-collection-mode-list `(dashboard dired ibuffer))
     (evil-collection-init))
   (use-package evil-tutor :ensure t :demand t)
 
@@ -126,110 +134,231 @@
 
 #+begin_src emacs-lisp
 
-  (use-package general :ensure t :demand t
-    :config
-    (general-evil-setup)
+    (defun cmcn/--nixos-rebuild-sentinel (buf status)
+      "One-shot hook: reload config on successful rebuild, then remove itself."
+      (remove-hook 'compilation-finish-functions #'cmcn/--nixos-rebuild-sentinel)
+      (if (string= status "finished\n")
+          (progn
+            (message "Rebuild complete, reloading config...")
+            (when (file-exists-p "~/.config/emacs/config.el")
+              (delete-file "~/.config/emacs/config.el"))
+            (load-file "~/.config/emacs/init.el"))
+        (message "Rebuild failed — see *compilation* buffer")))
 
-    ;; setup 'SPC' as the global leader key
-    (general-create-definer cmcn/leader-keys
-      :states '(normal insert visual emacs)
-      :keymaps 'override
-      :prefix "SPC" ;;set leader
-      :global-prefix "M-SPC") ;; access leader in insert mode
+    (defun cmcn/nixos-rebuild-and-reload ()
+      "Run nixos-rebuild switch (NixOS module), then reload emacs config.
+       Uses compile/comint mode so sudo auth (YubiKey/fprintd) works interactively."
+      (interactive)
+      (add-hook 'compilation-finish-functions #'cmcn/--nixos-rebuild-sentinel)
+      (compile "sudo nixos-rebuild test --flake /home/cameron/.westerOS/#$HOSTNAME &> nixos-switch.log" t))
 
-    (cmcn/leader-keys
-      "SPC" '(counsel-M-x :wk "Counsel M-x")
-      "." '(find-file :wk "Find file")
-      "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "f r" '(counsel-recentf :wk "Find recent files")
-      )
+    (defun cmcn/bookmark-set-and-save ()
+      "Set a bookmark at point and immediately save to disk."
+      (interactive)
+      (call-interactively #'bookmark-set)
+      (bookmark-save))
 
-    (cmcn/leader-keys
-      "b" '(:ignore t :wk "buffer")
-      "b b" '(switch-to-buffer :wk "Switch buffer")
-      "b s" '(ibuffer :wk "Ibuffer")
-      "b k" '(kill-current-buffer :wk "Kill this buffer")
-      "b n" '(next-buffer :wk "Next buffer")
-      "b p" '(previous-buffer :wk "Previous buffer")
-      "b r" '(revert-buffer :wk "Reload buffer"))
-    
-    (cmcn/leader-keys
-      "d" '(:ignore t :wk "Dired")
-      "d d" '(dired :wk "Open dired")
-      "d j" '(dired-jump :wk "Dired jump to current")
-      "d n" '(neotree-dir :wk "Open directory in neotree")
-      "d p" '(peep-dired :wk "Peep-dired")
-      )
+    (use-package general :ensure t :demand t
+      :config
+      (general-evil-setup)
 
-    (cmcn/leader-keys
-      "e" '(:ignore t :wk "EShell/Evaluate")
-      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-      "e e" '(eval-expression :wk "Evaluate an elisp expression")
-      "e h" '(counsel-esh-history :wk "Eshell history")
-      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-      "e r" '(eval-region :wk "Evaluate elisp in region")
-      "e s" '(eshell :wk "Eshell"))
+      ;; setup 'SPC' as the global leader key
+      (general-create-definer cmcn/leader-keys
+        :states '(normal insert visual emacs)
+        :keymaps 'override
+        :prefix "SPC" ;;set leader
+        :global-prefix "M-SPC") ;; access leader in insert mode
       
+      ;; BASIC
+      (cmcn/leader-keys
+        "SPC" '(counsel-M-x :wk "Counsel M-x")
+        "." '(find-file :wk "Find file")
+        )
 
-    (cmcn/leader-keys
-      "h" '(:ignore t :wk "Help")
-      "h f" '(describe-function :wk "Describe function")
-      "h v" '(describe-variable :wk "Describe variable")
-      "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
-    
-    (cmcn/leader-keys
-      "m" '(:ignore t :wk "Org")
-      "m a" '(org-agenda :wk "Org agenda")
-      "m e" '(org-export-dispatch :wk "Org export dispatch")
-      "m i" '(org-toggle-item :wk "Org toggle item")
-      "m t" '(org-todo :wk "Org todo")
-      "m B" '(org-babel-tangle :wk "Org babel tangle")
-      "m T" '(org-todo-list :wk "Org todo list")
-      "m c" '(org-capture :wk "Org Capture")
-      "m p" '(org-priority :wk "Org Choose Priority")
+      ;; BUFFERS
+      (cmcn/leader-keys
+        "b" '(:ignore t :wk "buffer")
+        "b b" '(switch-to-buffer :wk "Switch buffer")
+        "b s" '(ibuffer :wk "Ibuffer")
+        "b k" '(kill-current-buffer :wk "Kill this buffer")
+        "b n" '(next-buffer :wk "Next buffer")
+        "b p" '(previous-buffer :wk "Previous buffer")
+        "b r" '(revert-buffer :wk "Reload buffer")
+        )
+      
+      ;; DIRED
+      (cmcn/leader-keys
+        "d" '(:ignore t :wk "Dired")
+        "d d" '(dired :wk "Open dired")
+        "d j" '(dired-jump :wk "Dired jump to current")
+        "d n" '(neotree-dir :wk "Open directory in neotree")
+        "d p" '(peep-dired :wk "Peep-dired")
+        "d r" '((lambda () (interactive) (dired "~/")) :wk "Open Home Dir")
+        )
+
+      ;; ESHELL
+      (cmcn/leader-keys
+        "e" '(:ignore t :wk "EShell/Evaluate")
+        "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+        "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+        "e e" '(eval-expression :wk "Evaluate an elisp expression")
+        "e h" '(counsel-esh-history :wk "Eshell history")
+        "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+        "e r" '(eval-region :wk "Evaluate elisp in region")
+        "e s" '(eshell :wk "Eshell")
+        )
+      
+      ;; FILES
+      (cmcn/leader-keys
+        "f" '(:ignore t :wk "Files")
+        "f c" '((lambda () (interactive) (find-file "~/.westerOS/home-manager/configs/emacs/configs/config.org")) :wk "Edit emacs config")
+        "f r" '(counsel-recentf :wk "Find recent files")
+        "f b" '(cmcn/bookmark-set-and-save :wk "Set & save bookmark")
+        "f g" '(find-grep-dired :wk "Search for string in files in dir")
+        "f h" '(dashboard-open :wk "Go Home")
+        )
+      
+      ;; HELP
+      (cmcn/leader-keys
+        "h" '(:ignore t :wk "Help")
+        "h a" '(counsel-apropos :wk "Apropos")
+        "h b" '(describe-bindings :wk "Describe bindings")
+        "h c" '(describe-char :wk "Describe character under cursor")
+        "h d" '(:ignore t :wk "Emacs documentation")
+        "h d a" '(about-emacs :wk "About Emacs")
+        "h d d" '(view-emacs-debugging :wk "View Emacs debugging")
+        "h d f" '(view-emacs-FAQ :wk "View Emacs FAQ")
+        "h d m" '(info-emacs-manual :wk "The Emacs manual")
+        "h d n" '(view-emacs-news :wk "View Emacs news")
+        "h d o" '(describe-distribution :wk "How to obtain Emacs")
+        "h d p" '(view-emacs-problems :wk "View Emacs problems")
+        "h d t" '(view-emacs-todo :wk "View Emacs todo")
+        "h d w" '(describe-no-warranty :wk "Describe no warranty")
+        "h e" '(view-echo-area-messages :wk "View echo area messages")
+        "h f" '(describe-function :wk "Describe function")
+        "h F" '(describe-face :wk "Describe face")
+        "h g" '(describe-gnu-project :wk "Describe GNU Project")
+        "h i" '(info :wk "Info")
+        "h I" '(describe-input-method :wk "Describe input method")
+        "h k" '(describe-key :wk "Describe key")
+        "h l" '(view-lossage :wk "Display recent keystrokes and the commands run")
+        "h L" '(describe-language-environment :wk "Describe language environment")
+        "h m" '(describe-mode :wk "Describe mode")
+        "h r" '(:ignore t :wk "Reload")
+        "h r r" '(cmcn/nixos-rebuild-and-reload :wk "Rebuild + reload config")
+        "h v" '(describe-variable :wk "Describe variable")
+        )
+
+      ;; LAUNCH
+      (cmcn/leader-keys
+        "l" '(:ignore t :wk "Launch")
+        "l e" '(elfeed :wk "Launch elfeed")
+        "l v" '(vterm-toggle :wk "Launch vterm")
+        "l n" '(neotree-toggle :wk "Launch neotree")
+        "l p" '(org-pomodoro :wk "Launch pomodoro")
+        )
+
+      ;; (cmcn/leader-keys
+      ;;   "l m" '(emms-browser :wk "Launch music browser"))
+
+      ;; MEDIA
+      ;; (cmcn/leader-keys
+      ;;   "M" '(:ignore t :wk "Media")
+      ;;   "M b" '(emms-browser :wk "Music browser")
+      ;;   "M p" '(emms-pause :wk "Pause/resume")
+      ;;   "M s" '(emms-stop :wk "Stop")
+      ;;   "M n" '(emms-next :wk "Next track")
+      ;;   "M P" '(emms-previous :wk "Previous track")
+      ;;   "M r" '(emms-toggle-repeat-track :wk "Toggle repeat track")
+      ;;   "M S" '(emms-shuffle :wk "Shuffle playlist")
+      ;;   "M l" '(emms :wk "Playlist buffer"))
+
+      (cmcn/leader-keys
+        "M R" '(:ignore t :wk "Radio")
+        "M R t" '(eradio-toggle :wk "Toggle Radio")
+        "M R s" '(eradio-play :wk "Select Radio")
+        )
+
+      ;; ORG
+      (cmcn/leader-keys
+        "o" '(:ignore t :wk "Org")
+        "o a" '(org-agenda :wk "Org agenda")
+        "o e" '(org-export-dispatch :wk "Org export dispatch")
+        "o SPC" '(org-toggle-item :wk "Org toggle item")
+        "o t" '(org-todo :wk "Org todo")
+        "o B" '(org-babel-tangle :wk "Org babel tangle")
+        "o T" '(org-todo-list :wk "Org todo list")
+        "o c" '(org-capture :wk "Org Capture")
+        "o p" '(org-priority :wk "Org Choose Priority")
+
+        "o i" '(:ignore t :wk "Tables")
+        "o i -" '(org-table-insert-hline :wk "Insert hline in table")
+
+        "o d" '(:ignore t :wk "Date/deadline")
+        "o d t" '(org-time-stamp :wk "Org time stamp")
+
+        "o r" '(:ignore t :wk "Org Roam")
+        "o r f" '(org-roam-node-find :wk "Find node")
+        "o r i" '(org-roam-node-insert :wk "Insert node link")
+        "o r c" '(org-roam-capture :wk "Capture to node")
+        "o r b" '(org-roam-buffer-toggle :wk "Toggle backlinks buffer")
+        "o r s" '(org-roam-db-sync :wk "Sync roam DB")
+        "o r g" '(org-roam-graph :wk "Show graph")
+        "o r u" '(org-roam-ui-open :wk "Open roam UI")
+        )
+      
+      ;; PERSPECTIVES
+      (cmcn/leader-keys
+        "p" '(perspective-map :wk "Perspective keybindings")
+        )
+
+      ;; REFRESH
+      (cmcn/leader-keys
+        "r" '(:ignore r :wk "Refresh")
+        "r e" '(elfeed-update :wk "Refresh Elfeed feeds")
+        )
+
+      ;; SEARCH
+      (cmcn/leader-keys
+        "s" '(:ignore t :wk "Search")
+        "s d" '(dictionary-search :wk "Search dictionary")
+        "s m" '(man :wk "Man pages")
+        "s t" '(tldr :wk "Lookup TLDR docs for a command")
+        "s w" '(woman :wk "Similar to man but doesn't require man")
+        )
+
+      ;; TOGGLES
+      (cmcn/leader-keys
+        "t" '(:ignore t :wk "Toggle")
+        "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+        "t t" '(visual-line-mode :wk "Toggle truncated lines")
+        "t s" '(prettify-symbols-mode :wk "Toggle Prettify Symbols")
+        "t i" '(imenu-list-smart-toggle :wk "Toggle imenu-list")
+        "t f" '(flycheck-mode :wk "Toggle Flycheck")
+        )
+      
+      ;; WINDOWS
+      (cmcn/leader-keys
+        "w" '(:ignore t :wk "Windows")
+        "w c" '(evil-window-delete :wk "Close window")
+        "w n" '(evil-window-new :wk "New window")
+        "w v" '(evil-window-split :wk "Vertical split window")
+        "w s" '(evil-window-vsplit :wk "Horizontal split window")
+
+        "w h" '(evil-window-left :wk "Window left")
+        "w j" '(evil-window-down :wk "Window down")
+        "w k" '(evil-window-up :wk "Window up")
+        "w l" '(evil-window-right :wk "Window right")
+        "w w" '(evil-window-next :wk "Goto next window")
+
+        "w H" '(buf-move-left :wk "Buffer move left")
+        "w J" '(buf-move-down :wk "Buffer move down")
+        "w K" '(buf-move-up :wk "Buffer move up")
+        "w L" '(buf-move-right :wk "Buffer move right"))
       )
-    
-    (cmcn/leader-keys
-      "m b" '(:ignore t :wk "Tables")
-      "m b -" '(org-table-insert-hline :wk "Insert hline in table")
-    )
 
-    (cmcn/leader-keys
-      "m d" '(:ignore t :wk "Date/deadline")
-      "m d t" '(org-time-stamp :wk "Org time stamp")
-    )
-
-    (cmcn/leader-keys
-      "t" '(:ignore t :wk "Toggle")
-      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-      "t t" '(visual-line-mode :wk "Toggle truncated lines")
-      "t v" '(vterm-toggle :wk "Toggle vterm")
-      "t n" '(neotree-toggle :wk "Toggle neotree")
-      "t p" '(org-pomodoro :wk "Toggle pomodoro")
-      )
-    
-    (cmcn/leader-keys
-      "w" '(:ignore t :wk "Windows")
-      "w c" '(evil-window-delete :wk "Close window")
-      "w n" '(evil-window-new :wk "New window")
-      "w v" '(evil-window-split :wk "Vertical split window")
-      "w s" '(evil-window-vsplit :wk "Horizontal split window")
-
-      "w h" '(evil-window-left :wk "Window left")
-      "w j" '(evil-window-down :wk "Window down")
-      "w k" '(evil-window-up :wk "Window up")
-      "w l" '(evil-window-right :wk "Window right")
-      "w w" '(evil-window-next :wk "Goto next window")
-
-      "w H" '(buf-move-left :wk "Buffer move left")
-      "w J" '(buf-move-down :wk "Buffer move down")
-      "w K" '(buf-move-up :wk "Buffer move up")
-      "w L" '(buf-move-right :wk "Buffer move right"))
-  )
-
-  ;; Stop needing to hit escape 3 times to exit mini buffer
-  (global-set-key [escape] 'keyboard-escape-quit)
+    ;; Stop needing to hit escape 3 times to exit mini buffer
+    (global-set-key [escape] 'keyboard-escape-quit)
 #+end_src
 
 
@@ -240,7 +369,7 @@ Defining the various fonts Emacs will use.
 
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil
-    :font "FiraCode Nerd Font"
+    :font "FiraMono Nerd Font"
     :height 180
     :weight 'medium)
   (set-face-attribute 'variable-pitch nil
@@ -248,7 +377,7 @@ Defining the various fonts Emacs will use.
     :height 180
     :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
-    :font "FiraCode Nerd Font"
+    :font "FiraMono Nerd Font"
     :height 180
     :weight 'medium)
 
@@ -257,7 +386,7 @@ Defining the various fonts Emacs will use.
   (set-face-attribute 'font-lock-keyword-face nil
   		    :slant 'italic)
 
-  (add-to-list 'default-frame-alist '(font . "FiraCode Nerd Font 18"))
+  (add-to-list 'default-frame-alist '(font . "FiraMono Nerd Font 18"))
 
   (setq-default line-spacing 0.12)
 
@@ -279,6 +408,22 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
 
   (use-package nerd-icons-dired :demand t :ensure t
     :hook (dired-mode . nerd-icons-dired-mode))
+
+  (defun my/org-mode/load-prettify-symbols ()
+    (interactive)
+    (setq prettify-symbols-alist
+          '(("#+begin_src" . ?🢃)
+            ("#+BEGIN_SRC" . ?🢃)
+            ("#+end_src"   . ?🢁)
+            ("#+END_SRC"   . ?🢁)
+            ("[ ]"   . ?🔲  )
+            ("[X]"   . ?✅ )
+            ("[-]"   . ?⬛ )
+            (":properties:"   . ?⟡  )
+            ("lambda"   . ?λ)))
+    (prettify-symbols-mode 1))
+
+  (add-hook 'org-mode-hook #'my/org-mode/load-prettify-symbols)
 #+end_src
 
 ** Colors
@@ -363,7 +508,9 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
   (use-package projectile :demand t :ensure t
     :diminish
     :config
-    (projectile-mode 1))
+    (projectile-mode 1)
+    (setq projectile-project-search-path '("~/0_projects" "~/.westerOS"))
+    (projectile-discover-projects-in-search-path))
 
 #+end_src
 
@@ -377,14 +524,15 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
     (setq dashboard-banner-logo-title "Always be learning!")
-    (setq dashboard-startup-banner 'logo)
-    ;; (setq dashboard-startup-banner "file.png")
+    (setq dashboard-startup-banner "~/.config/emacs/assets/goon.png")
+    (setq dashboard-image-banner-max-width 200)
+    (setq dashboard-vertically-center-content nil)
     (setq dashboard-center-content t)
-    (setq dashboard-items '((recents . 5)
-  			  (agenda . 5)
+    (setq dashboard-projects-backend 'projectile)
+    (setq dashboard-items '((recents   . 5)
+  			  (agenda    . 5)
   			  (bookmarks . 3)
-  			  (projects . 3)
-  			  (registers . 3)))
+  			  (projects  . 3)))
     :config
     ;; (dashboard-modify-heading-icons '((recents . "nf-fa-clock")
     ;; 				    (bookmarks . "nf-fa-book")))
@@ -394,13 +542,24 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
 
 * ELFEED
 #+begin_src emacs-lisp
-    (use-package elfeed :demand t :ensure t
-      :config
-      (setq elfeed-search-feed-face ":foreground #ffffff :weight bold"
-    	elfeed-feeds (quote
-    		      (
-  		       ("https://www.opensource.com/feed" opensource linux)
-    		      ))))
+  (use-package elfeed :demand t :ensure t
+    :config
+    (setq elfeed-search-feed-face ":foreground #ffffff :weight bold"
+  	elfeed-feeds (quote
+  		      (
+  		       ("https://www.reddit.com/r/all.rss" opensource linux)
+  		      ))))
+
+  (use-package elfeed-goodies :demand t :ensure t
+    :config
+    (setq elfeed-goodies/entry-pane-size 0.5)
+    (evil-define-key 'normal elfeed-show-mode-map
+      (kbd "J") 'elfeed-goodies/split-show-next
+      (kbd "K") 'elfeed-goodies/split-show-prev)
+    (evil-define-key 'normal elfeed-search-mode-map
+      (kbd "J") 'elfeed-goodies/split-show-next
+      (kbd "K") 'elfeed-goodies/split-show-prev)
+    (elfeed-goodies/setup))
 #+end_src
 
 * FILES
@@ -452,6 +611,14 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
   		  (setq auto-hscroll-mode nil)))))
 
 #+end_src
+* IMENU
+#+begin_src emacs-lisp
+  (use-package imenu-list :demand t :ensure t
+    :config
+    (setq imenu-list-focus-after-activation t))
+
+#+end_src
+
 * IVY (COUNSEL)
 + Ivy, a generic completion mechanism for Emacs.
 + Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
@@ -534,6 +701,71 @@ Must install =luacheck= for lua files, =python-pylint= for python files, =
 
 #+end_src
 
+* MEDIA
+** Emms
+#+begin_comment
+#+begin_src emacs-lisp
+  (use-package emms :demand t :ensure t
+    :config
+    (emms-all)
+    (setq emms-source-file-default-directory "~/4_media/43_music/"
+          emms-player-list '(emms-player-mpv)
+          emms-player-mpv-parameters '("--quiet" "--really-quiet" "--no-video")
+          emms-info-functions '(emms-info-native)
+          emms-browser-covers #'emms-browser-cache-thumbnail-async
+          emms-repeat-playlist t)
+
+    )
+
+  (with-eval-after-load 'emms-playlist-mode
+    (evil-define-key 'normal emms-playlist-mode-map
+      (kbd "j")   #'next-line
+      (kbd "k")   #'previous-line
+      (kbd "RET") #'emms-playlist-mode-play-smart
+      (kbd "d")   #'emms-playlist-mode-kill-track
+      (kbd "p")   #'emms-pause
+      (kbd "s")   #'emms-stop
+      (kbd "n")   #'emms-next
+      (kbd "P")   #'emms-previous
+      (kbd "r")   #'emms-toggle-repeat-track
+      (kbd "R")   #'emms-toggle-repeat-playlist
+      (kbd "S")   #'emms-shuffle
+      (kbd "c")   #'emms-playlist-mode-clear
+      (kbd "q")   #'quit-window))
+
+  (with-eval-after-load 'emms-browser
+    (evil-define-key 'normal emms-browser-mode-map
+      (kbd "j")   #'next-line
+      (kbd "k")   #'previous-line
+      (kbd "RET") #'emms-browser-add-tracks-and-play
+      (kbd "a")   #'emms-browser-add-tracks
+      (kbd "TAB") #'emms-browser-toggle-subitems
+      (kbd "p")   #'emms-pause
+      (kbd "s")   #'emms-stop
+      (kbd "n")   #'emms-next
+      (kbd "P")   #'emms-previous
+      (kbd "q")   #'quit-window))
+
+#+end_src
+#+end_comment
+
+
+** Eradio
+#+begin_src emacs-lisp
+  (use-package eradio :demand t :ensure t
+  :init
+  (setq eradio-player '("mpv" "--no-video" "--no-terminal"))
+  :config
+  (setq eradio-channels '(("Deep Space One" . "https://somafm.com/deepspaceone130.pls")
+  			("Vaporwaves" . "https://somafm.com/vaporwaves130.pls")
+                          ("GrooveSalad" . "https://somafm.com/groovesalad130.pls")
+                          ("Heavyweight Reggae" . "https://somafm.com/reggae130.pls")
+                          ("Left Coast 70s" . "https://somafm.com/seventies130.pls")
+                          ("SonicUniverse" . "https://somafm.com/sonicuniverse130.pls")
+                          ("ThistleRadio Celtic" . "https://somafm.com/thistle130.pls"))))
+
+#+end_src
+
 * ORG MODE
 ** Org Tasks
 #+begin_src emacs-lisp
@@ -565,7 +797,29 @@ Must install =luacheck= for lua files, =python-pylint= for python files, =
   	 (file+headline ,(concat org-directory "tasks.org") "Inbox")
   	 "* TODO %?\n%^t\n%a\n")
   	))
-  
+  (setq
+   org-fancy-priorities-list '("[A]" "[B]" "[C]")
+   org-priority-faces
+   '((?A :foreground "#ff6c6b" :weight bold)
+     (?B :foreground "#98be65" :weight bold)
+     (?C :foreground "#c678dd" :weight bold)))
+
+  (setq org-agenda-block-separator 8411)
+
+  (setq org-agenda-custom-commands
+        '(("v" "A better agenda view"
+  	 ((tags "PRIORITY=\"A\""
+  		((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+  		 (org-agenda-overriding-header "High-priority_unfinished tasks:")))
+  	 ((tags "PRIORITY=\"B\""
+  		((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+  		 (org-agenda-overriding-header "Medium-priority_unfinished tasks:")))
+  	 ((tags "PRIORITY=\"C\""
+  		((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+  		 (org-agenda-overriding-header "Low-priority_unfinished tasks:")))
+  	  (agenda "")
+  	  (alltodo "")))))))
+
 #+end_src
 ** Enable ToC
 #+begin_src emacs-lisp
@@ -578,8 +832,8 @@ Must install =luacheck= for lua files, =python-pylint= for python files, =
 
 #+begin_src emacs-lisp
   (add-hook 'org-mode-hook 'org-indent-mode)
-  (use-package org-bullets :demand t :ensure t :diminish)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (use-package org-superstar :demand t :ensure t
+    :hook (org-mode . org-superstar-mode))
   (eval-after-load 'org-indent '(diminish 'org-indent-mode))
 #+end_src
 
@@ -621,11 +875,50 @@ Must install =luacheck= for lua files, =python-pylint= for python files, =
 (require 'org-tempo)
 #+end_src
 
+** Org Auto Tangle
+
+This is now setup to auto tangle. Docs that require this will need:
+#+begin_example
+#+PROPERTY header-args :tangle <file name>
+#+auto-tangle: t
+#+end_example
+In the head
+
+#+begin_src emacs-lisp
+  (use-package org-auto-tangle :demand t :ensure t
+    :hook (org-mode . org-auto-tangle-mode)
+    :config
+    (setq org-auto-tangle-default t))
+#+end_src
+
+** Org Roam
+
+#+begin_src emacs-lisp
+  (use-package org-roam :demand t :ensure t
+    :init
+    (setq org-roam-directory
+          "/home/cameron/1_documents/20-29_admin/21_obsidian-vaults/21.11_Citadel_Org")
+    (setq org-roam-db-location
+          (expand-file-name "org-roam.db" org-roam-directory))
+    :custom
+    (org-roam-completion-everywhere t)
+    :config
+    (org-roam-db-autosync-mode))
+
+  (use-package org-roam-ui :demand t :ensure t
+    :after org-roam
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start nil))
+#+end_src
+
 * PERSPECTIVE
 #+begin_src emacs-lisp
   (use-package perspective :demand t :ensure t
     :custom
-    (persp-mode-prefix-key (kbd "C-c M-p"))
+    (persp-mode-prefix-key (kbd "C-h"))
     :init
     (persp-mode)
     :config
@@ -646,11 +939,11 @@ Must install =luacheck= for lua files, =python-pylint= for python files, =
   	org-pomodoro-short-break-length 5
   	org-pomodoro-long-break-length 15
 
-  	;; org-pomodoro-audio-player "mpv"
+  	org-pomodoro-audio-player "mpv"
   	
-  	;; org-pomodoro-finished-sound "~/"
-  	;; org-pomodoro-short-break-sound "~/"
-  	;; org-pomodoro-long-break-sound "~/"
+  	org-pomodoro-finished-sound "~/.config/emacs/assets/finished.wav"
+  	org-pomodoro-short-break-sound "~/.config/emacs/assets/level-up-02.mp3"
+  	org-pomodoro-long-break-sound "~/.config/emacs/assets/level-up-03.mp3"
   	
   	org-pomodoro-finished-sound-p t
   	org-pomodoro-short-break-sound-p t

@@ -1,18 +1,13 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}: {
-  # Copy emacs configuration files to ~/.config/emacs on each rebuild
-  home.activation.copyEmacsConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    EMACS_CONFIG_SRC="${./configs}"
-    EMACS_CONFIG_DEST="${config.home.homeDirectory}/.config/emacs"
-
-    $DRY_RUN_CMD mkdir -p "$EMACS_CONFIG_DEST"
-    $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -a --exclude='elpaca/' --exclude='elfeed/' "$EMACS_CONFIG_SRC/" "$EMACS_CONFIG_DEST/"
-    $DRY_RUN_CMD chmod -R u+w "$EMACS_CONFIG_DEST"
-  '';
+{pkgs, ...}: {
+  # Symlink static emacs config files into ~/.config/emacs
+  # bookmarks is intentionally omitted — emacs manages it at runtime
+  home.file = {
+    ".config/emacs/config.org".source = ./configs/config.org;
+    ".config/emacs/early-init.el".source = ./configs/early-init.el;
+    ".config/emacs/init.el".source = ./configs/init.el;
+    ".config/emacs/scripts".source = ./configs/scripts;
+    ".config/emacs/assets".source = ./configs/assets;
+  };
 
   programs.emacs = {
     enable = true;
@@ -34,5 +29,11 @@
     e = "emacsclient -t";
     ec = "emacsclient -c";
     emacs-debug = "emacs --debug-init";
+  };
+
+  # Hide the plain emacs desktop entry — emacsclient is used instead
+  xdg.desktopEntries.emacs = {
+    name = "Emacs";
+    noDisplay = true;
   };
 }

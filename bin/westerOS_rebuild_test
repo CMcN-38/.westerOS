@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 pushd /home/cameron/.westerOS/
+[ -f ~/.config/emacs/config.el ] && rm ~/.config/emacs/config.el
 nvim
 #alejandra . &>/dev/null
 git diff -U0 *.nix
@@ -11,5 +12,6 @@ sudo nixos-rebuild test --flake /home/cameron/.westerOS/#$HOSTNAME &> nixos-swit
 gen=$(nixos-rebuild list-generations | grep current)
 git commit -am "$(date)"
 popd
+systemctl --user restart emacs
 notify-send -e "NixOS Rebuilt OK!" --icon=software-update-available
 
