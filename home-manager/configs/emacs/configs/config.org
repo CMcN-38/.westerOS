@@ -922,7 +922,10 @@ In the head
     :init
     (persp-mode)
     :config
-    (setq persp-state-default-file "~/.config/emacs/sessions"))
+    (setq persp-state-default-file "~/.config/emacs/sessions")
+    (define-key perspective-map (kbd "s") #'persp-ibuffer)
+    (define-key perspective-map (kbd "c") #'persp-switch)
+    (add-hook 'persp-created-hook #'dashboard-open))
   (add-hook 'ibuffer-hook
   	  (lambda ()
   	    (persp-ibuffer-set-filter-groups)
