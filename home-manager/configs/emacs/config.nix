@@ -7,6 +7,7 @@
     ".config/emacs/init.el".source = ./configs/init.el;
     ".config/emacs/scripts".source = ./configs/scripts;
     ".config/emacs/assets".source = ./configs/assets;
+    ".config/emacs/templates".source = ./configs/templates;
   };
 
   programs.emacs = {

@@ -70,9 +70,10 @@
   (delete-selection-mode 1)
   (electric-indent-mode -1)
   (electric-pair-mode 0)
-  (global-auto-revert-mode t)
+  (global-auto-revert-mode 1)
   (setq bookmark-default-file "~/.config/emacs/bookmarks")
   (bookmark-load bookmark-default-file t)
+  (setq use-dialog-box nil)
 #+end_src
 
 * EVIL MODE
@@ -151,6 +152,16 @@
       (interactive)
       (add-hook 'compilation-finish-functions #'cmcn/--nixos-rebuild-sentinel)
       (compile "sudo nixos-rebuild test --flake /home/cameron/.westerOS/#$HOSTNAME &> nixos-switch.log" t))
+
+    (defun cmcn/org-roam-dailies-open-today ()
+      "Open today's daily note, creating it from template if it doesn't exist."
+      (interactive)
+      (let ((today (format-time-string "%Y-%m-%d")))
+        (if (file-exists-p (expand-file-name
+                            (concat today ".org")
+                            (expand-file-name org-roam-dailies-directory org-roam-directory)))
+            (org-roam-dailies-goto-today)
+          (org-roam-dailies-capture-today))))
 
     (defun cmcn/bookmark-set-and-save ()
       "Set a bookmark at point and immediately save to disk."
@@ -305,6 +316,12 @@
         "o r s" '(org-roam-db-sync :wk "Sync roam DB")
         "o r g" '(org-roam-graph :wk "Show graph")
         "o r u" '(org-roam-ui-open :wk "Open roam UI")
+        "o r d" '(:ignore t :wk "Dailies")
+        "o r d t" '(cmcn/org-roam-dailies-open-today :wk "Today's note")
+        "o r d y" '(org-roam-dailies-goto-yesterday :wk "Yesterday's note")
+        "o r d d" '(org-roam-dailies-goto-date :wk "Goto date")
+        "o r d n" '(org-roam-dailies-goto-next-note :wk "Next note")
+        "o r d p" '(org-roam-dailies-goto-previous-note :wk "Previous note")
         )
       
       ;; PERSPECTIVES
@@ -499,6 +516,29 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
   (global-visual-line-mode t)
 
   (use-package diminish :demand t :ensure t)
+
+  ;; Solaire darkens non-file related buffers to make it easier to distinguish
+  (use-package solaire-mode :demand t :ensure t
+    :config (solaire-global-mode 1))
+
+  ;; Golden Ratio alters split sizes based on priority
+  (use-package golden-ratio :demand t :ensure t
+    :custom
+    (golden-ratio-exclude-modes '(occur-mode))
+    :config (golden-ratio-mode 1))
+
+  ;;ivy-posframe centers the M-x menu in the frame
+  (use-package ivy-posframe :demand t :ensure t
+    :after ivy
+    :config
+    (setq ivy-posframe-display-functions-alist
+          '((t . ivy-posframe-display-at-frame-center)))
+    (setq ivy-posframe-parameters
+          '((left-fringe . 8)
+            (right-fringe . 8)))
+    (ivy-posframe-mode 1))
+
+
 #+end_src
 
 * DASHBOARD
@@ -900,10 +940,28 @@ In the head
           "/home/cameron/1_documents/20-29_admin/21_obsidian-vaults/21.11_Citadel_Org")
     (setq org-roam-db-location
           (expand-file-name "org-roam.db" org-roam-directory))
+    (setq org-roam-dailies-directory "Journal/Daily/")
+    (setq org-roam-dailies-capture-templates
+          `(("d" "daily" plain
+             (file "~/.config/emacs/templates/daily-note.org")
+             :target (file+head "%<%Y-%m-%d>.org"
+                                "#+title: %<%Y-%m-%d>\n")
+             :unnarrowed t)))
     :custom
     (org-roam-completion-everywhere t)
     :config
-    (org-roam-db-autosync-mode))
+    (org-roam-db-autosync-mode)
+    ;; Only add the last 14 days of daily notes to org-agenda to avoid slow startup
+    (let ((cutoff (time-subtract (current-time) (seconds-to-time (* 30 86400)))))
+      (dolist (file (directory-files
+                     (expand-file-name org-roam-dailies-directory org-roam-directory)
+                     t "\\.org$"))
+        (let ((date (file-name-base file)))
+          (when (and (string-match-p "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}$" date)
+                     (not (time-less-p
+                           (date-to-time (concat date "T00:00:00"))
+                           cutoff)))
+            (add-to-list 'org-agenda-files file))))))
 
   (use-package org-roam-ui :demand t :ensure t
     :after org-roam

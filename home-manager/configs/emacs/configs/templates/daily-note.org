@@ -1,0 +1,55 @@
+:PROPERTIES:
+:date: %<%Y-%m-%d>
+:effectiveness:
+:mood:
+:workout:
+:afternoon_walk:
+:read:
+:bite_nails:
+:greens:
+:tablets:
+:morning_pages:
+:processed: red
+:END:
+
+* %<%A, %B %d %Y>
+
+-----
+
+** Morning
+
+*** What is the main focus for today?
+
+
+*** What are you grateful for?
+
+
+*** What else would make today great?
+
+
+*** Main Goals
+- [ ]
+- [ ]
+- [ ]
+
+*** Morning Pages
+
+
+** Daytime Notes
+
+
+** Evening
+
+*** What went well today?
+
+
+*** What didn't go so well today?
+
+
+*** How would you describe your overall mood today?
+
+
+*** Homework For Life
+
+
+** Today's Activity
