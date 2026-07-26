@@ -28,12 +28,13 @@
     config,
     lib,
     inputs,
+    secrets,
     ...
 }: {
 
     home-manager = {
         backupFileExtension = "bak";
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs secrets; };
         users.cameron ={
             imports = [
                 ../hosts/${config.networking.hostName}/home-configuration.nix

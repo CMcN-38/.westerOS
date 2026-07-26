@@ -32,10 +32,14 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      # secrets.nix is gitignored — requires --impure to read from disk at build time.
+      # See secrets.example.nix for the expected format.
+      secretsPath = /home/cameron/.westerOS/secrets.nix;
+      secrets = if builtins.pathExists secretsPath then import secretsPath else {};
     in
     {
       nixosConfigurations.targaryen = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs secrets; };
         modules = [
           ./hosts/targaryen/configuration.nix
           home-manager.nixosModules.default

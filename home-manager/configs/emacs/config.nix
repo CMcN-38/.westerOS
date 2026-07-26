@@ -13,6 +13,7 @@
   programs.emacs = {
     enable = true;
     package = pkgs.emacs;
+    extraPackages = epkgs: [ epkgs.mu4e ];
   };
 
   services.emacs = {

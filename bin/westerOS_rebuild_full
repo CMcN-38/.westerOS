@@ -7,7 +7,7 @@ nvim
 git diff -U0 *.nix
 HOSTNAME=$(hostname)
 echo "NixOS Rebuilding for host: $HOSTNAME..."
-sudo nixos-rebuild switch --flake /home/cameron/.westerOS/#$HOSTNAME &> nixos-switch.log || (
+sudo nixos-rebuild switch --impure --flake /home/cameron/.westerOS/#$HOSTNAME &> nixos-switch.log || (
 	sudo cat nixos-switch.log | grep --color error && false)
 gen=$(nixos-rebuild list-generations | grep current)
 # git commit -am "$(date)"
