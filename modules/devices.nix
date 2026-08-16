@@ -37,8 +37,8 @@
 
     hardware.logitech.wireless = {
         enable = true;
-        enableGraphical = true;
     };
+    programs.solaar.enable = true;
 
     security.rtkit.enable = true;
     services = {
@@ -58,6 +58,15 @@
         logiops         # Logitech options (needed for mouse sensitivity)
         wiremix         # Wiremix audio tui
     ];
+
+    systemd.services.logid = {
+        description = "Logitech Options Daemon";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+            ExecStart = "${pkgs.logiops}/bin/logid";
+            Restart = "on-failure";
+        };
+    };
 
     #External Monitor Controls
     hardware.i2c.enable = true;

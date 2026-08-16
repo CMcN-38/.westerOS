@@ -38,7 +38,6 @@
     gtk4
     glib
     go
-    imagemagick
     imagemagickBig
     jq
     lua
@@ -62,10 +61,10 @@
         wand
       ]))
     # rustup
-    libsForQt5.qt5.qtwayland
-    libsForQt5.qt5.qtgraphicaleffects
-    libsForQt5.qt5.qtsvg
-    libsForQt5.qt5.qtquickcontrols
+    qt5.qtwayland
+    qt5.qtgraphicaleffects
+    qt5.qtsvg
+    qt5.qtquickcontrols
     libadwaita
     # rustc
     rustup
@@ -82,10 +81,10 @@
     # Emacs tools — LSP servers, formatters, and runtime dependencies
     nil                                          # Nix LSP
     rust-analyzer                                # Rust LSP
-    nodePackages.typescript-language-server      # TS/JS LSP
-    nodePackages.yaml-language-server            # YAML LSP
-    nodePackages.vscode-langservers-extracted    # HTML/CSS/JSON LSP
-    nodePackages.prettier                        # Multi-language formatter
+    typescript-language-server      # TS/JS LSP
+    yaml-language-server            # YAML LSP
+    vscode-langservers-extracted    # HTML/CSS/JSON LSP
+    prettier                        # Multi-language formatter
     black                                        # Python formatter
     sqlite                                       # org-roam database
     graphviz                                     # org-mode diagram rendering

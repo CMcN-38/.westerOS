@@ -8,6 +8,7 @@ wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
+    configType = "hyprlang";
     extraConfig =
         ''
           env = NIXOS_OZONE_WL, 1
@@ -30,16 +31,14 @@ wayland.windowManager.hyprland = {
           exec-once = lxqt-policykit-agent
     exec-once = waybar
     exec-once = swaync
-    exec-once = sudo logid
     exec-once = streamdeck -n
     # exec-once = swww-daemon #Wallpaper
     exec-once = swaybg -i /home/cameron/.themes/current/background
     exec-once = hypridle
     exec-once = thunar --daemon #Start file manager daemon in the background
     exec-once = goxlr-daemon --http-disable
-    exec-once = emac --daemon
+    exec-once = emacs --daemon
     exec-once = solaar -w hide
-    exec-once = syncthing
           # monitor=,preferred,auto,1
     monitor=,2880x1920@120,auto,1.5
 
@@ -98,7 +97,6 @@ wayland.windowManager.hyprland = {
     # windowrule = workspace 3, title:^(Espanso Sync Tool)$
     
 
-    windowrule = workspace 1, match:class ^(kitty)$
     windowrule = workspace 1, match:class ^(kitty)$
     windowrule = workspace 2, match:class ^(zen)$ 
     windowrule = workspace 3, match:class ^(Cider)$
@@ -246,14 +244,13 @@ wayland.windowManager.hyprland = {
 
     # Screenshots
     bind = $mainMod, S, exec, westerOS_screenshot
-    # bind = $mainMod, S, exec, gradia --screenshot
 
     # Autolauch
     exec-once = kitty
     exec-once = appimage-run -d /home/cameron/2_desktop/zen-specific.AppImage
     exec-once = westerOS_launch_cider
     exec-once = discordptb
-    exec-once = obsidian
+    exec-once = [workspace 5 silent] obsidian
     # exec-once = transmission-gtk
     
     $osdclient = swayosd-client --monitor "$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')"

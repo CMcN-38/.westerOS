@@ -50,6 +50,7 @@
   - [[#vterm][Vterm]]
   - [[#vterm-toggle][Vterm-Toggle]]
   - [[#ghostterm][Ghostterm]]
+- [[#mu4e][MU4E]]
 - [[#sudo-edit][SUDO EDIT]]
 - [[#tldr][TLDR]]
 - [[#which-key][WHICH KEY]]
@@ -585,10 +586,17 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
   (use-package elfeed :demand t :ensure t
     :config
     (setq elfeed-search-feed-face ":foreground #ffffff :weight bold"
-  	elfeed-feeds (quote
-  		      (
-  		       ("https://www.reddit.com/r/all.rss" opensource linux)
-  		      ))))
+          elfeed-use-curl t
+          elfeed-feeds '(("proto+feedly://feeds/feedly" feedly))))
+
+  (use-package elfeed-protocol :demand t :ensure t
+    :after elfeed
+    :config
+    (setq elfeed-protocol-feedly-client-id "feedly"
+          elfeed-protocol-feeds
+          '(("proto+feedly://feeds/feedly"
+             :api-token "YOUR_FEEDLY_TOKEN_HERE")))
+    (elfeed-protocol-enable))
 
   (use-package elfeed-goodies :demand t :ensure t
     :config
@@ -1070,7 +1078,7 @@ In the head
   (use-package mu4e :ensure nil :demand t
     :config
     (setq mu4e-mu-binary        (executable-find "mu")
-          mu4e-maildir          (expand-file-name "~/Mail")
+          mu4e-maildir          (expand-file-name "~/1_documents/00-09_meta/04_proton_bridge")
           mu4e-get-mail-command "mbsync -a"
           mu4e-update-interval  (* 5 60)
           mu4e-change-filenames-when-moving t)

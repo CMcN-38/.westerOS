@@ -22,7 +22,7 @@
 inputs,
 ...}: let
   pkgsTx = import inputs.nixpkgs_tx {
-    inherit (pkgs) system;
+    system = pkgs.stdenv.hostPlatform.system;
     # If you use unfree anywhere, keep this consistent:
     config.allowUnfree = true;
   };
@@ -59,17 +59,14 @@ in {
     keymapp                     # keyboard mapping
     localsend                   # local file sending
     protonmail-bridge
+    protonmail-desktop
     
-    jetbrains-toolbox
-
     mpv                         # multimedia player
     obsidian                    # pkm notes
     obs-studio                  # screen recording
     proton-pass                 # password manager
-    syncthing                   # file sync
     thonny                      # pi-zero IDE
     # transmission_4-gtk          # torrent interface
-    zotero                      # document manager (replacing with paperless)
   ];
 
   services.goxlr-utility.enable = true;

@@ -45,6 +45,7 @@
 
         # Modules:
         ../../modules/networking-baratheon.nix
+        ../../modules/networking-shared.nix
         ../../modules/users.nix
         ../../modules/devices-baratheon.nix
         ../../modules/settings.nix

@@ -16,7 +16,7 @@ in {
   #   4. exit
   #   5. install -m600 /dev/null ~/.config/protonmail/bridge-pass
   #      printf 'YOUR_BRIDGE_PASSWORD' > ~/.config/protonmail/bridge-pass
-  #   6. mu init --maildir=~/Mail --my-address=<your address>
+  #   6. mu init --maildir=~/1_documents/00-09_meta/04_proton_bridge --my-address=<your address>
   #      mbsync -a && mu index
 
   systemd.user.services.protonmail-bridge = {
@@ -25,9 +25,17 @@ in {
       After = [ "network.target" ];
     };
     Service = {
+      ExecStartPre = pkgs.writeShellScript "bridge-prestart" ''
+        ${pkgs.procps}/bin/pkill -9 -f protonmail-bridge || true
+        sleep 1
+        find "$HOME/.local/share/protonmail" -name "*.lock" -delete 2>/dev/null || true
+        find "$HOME/.config/protonmail" -name "*.lock" -delete 2>/dev/null || true
+      '';
       ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --noninteractive";
       Restart = "on-failure";
       RestartSec = "5s";
+      KillMode = "control-group";
+      TimeoutStopSec = "10";
     };
     Install = {
       WantedBy = [ "default.target" ];
@@ -39,21 +47,17 @@ in {
   # ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
   accounts.email = {
-    maildirBasePath = "${config.home.homeDirectory}/Mail";
+    maildirBasePath = "${config.home.homeDirectory}/1_documents/00-09_meta/04_proton_bridge";
 
     accounts.protonmail = {
       primary  = true;
+      userName = address;
       inherit address realName;
 
       imap = {
         host = "127.0.0.1";
         port = 1143;
-        tls = {
-          enable = true;
-          useStartTls = true;
-          # Generated on first bridge login
-          certificatesFile = "${config.home.homeDirectory}/.local/share/protonmail/bridge-v3/cert.pem";
-        };
+        tls.enable = false;
       };
 
       smtp = {

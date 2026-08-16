@@ -58,7 +58,7 @@
             enable = true;
             trustedInterfaces = ["tailscale0"];
             allowedUDPPorts = [config.services.tailscale.port 51413];
-            allowedTCPPorts = [22 51413 8080];
+            allowedTCPPorts = [22 51413];
         };
     };
 
@@ -73,20 +73,7 @@
     services.openssh = {
         enable = true;
         settings.PubkeyAuthentication = true;
-        settings.PasswordAuthentication = true; # Ideally this would be false but due to Blink bugs, necessary.
-    };
-
-    programs.ssh = {
-        extraConfig = "
-            Host stark
-                Hostname 192.168.4.96
-                Port 22
-                User cameron
-            Host lannister
-                Hostname 192.168.4.121
-                Port 22
-                User cameron
-        ";
+        settings.PasswordAuthentication = false;
     };
 
 }

@@ -30,7 +30,7 @@
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-color-emoji
-    openmoji-color
+    # openmoji-color
     freefont_ttf
     nerd-fonts.fira-code
     nerd-fonts.fira-mono

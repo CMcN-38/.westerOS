@@ -8,6 +8,7 @@ wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
+    configType = "hyprlang";
     extraConfig =
         ''
           env = NIXOS_OZONE_WL, 1
@@ -30,7 +31,6 @@ wayland.windowManager.hyprland = {
           exec-once = lxqt-policykit-agent
     exec-once = waybar
     exec-once = swaync
-    exec-once = logid
     exec-once = streamdeck -n
     # exec-once = swww-daemon #Wallpaper
     exec-once = swaybg -i /home/cameron/.omarchy/current/background
@@ -38,7 +38,6 @@ wayland.windowManager.hyprland = {
     exec-once = thunar --daemon #Start file manager daemon in the background
     exec-once = goxlr-daemon --http-disable
     exec-once = solaar -w hide
-    exec-once = syncthing
           monitor=,preferred,auto,1.5
     # monitor=,3840x2160@60,auto,1
 
@@ -187,7 +186,7 @@ wayland.windowManager.hyprland = {
     bind = $mainMod, O, exec, obsidian
     bind = $mainMod, C, exec, Cider
     # bind = $mainMod, C, exec, appimage-run -d /home/cameron/2_desktop/Cider-linux-appimage-x64.AppImage
-    bind = $mainMod, D, exec, discordcanary
+    bind = $mainMod, D, exec, discordptb
 
     # Move focus with mainMod + arrow keys
     bind = $mainMod, left, movefocus, l
@@ -240,14 +239,13 @@ wayland.windowManager.hyprland = {
 
     # Screenshots
     bind = $mainMod, S, exec, westerOS_screenshot
-    # bind = $mainMod, S, exec, gradia --screenshot
 
     # Autolauch
     exec-once = kitty
     exec-once = appimage-run -d /home/cameron/2_desktop/zen-specific.AppImage
     # exec-once = Cider
     # exec-once = discordcanary
-    exec-once = obsidian
+    exec-once = [workspace 5 silent] obsidian
     # exec-once = transmission-gtk
     
     $osdclient = swayosd-client --monitor "$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')"
@@ -257,7 +255,7 @@ wayland.windowManager.hyprland = {
     bindeld = ,XF86AudioMute, Volume up, exec, $osdclient --output-volume mute-toggle
 
     bindeld = ,XF86MonBrightnessUp, Brightness up, exec, westerOS_brightness_display +10%
-    bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display 10%-
+    bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display -10%
 
     binde = SHIFT, XF86MonBrightnessUp, exec, westerOS_brightness_kbd up
     binde = SHIFT, XF86MonBrightnessDown, exec, westerOS_brightness_kbd down

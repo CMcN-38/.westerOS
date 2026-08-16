@@ -33,6 +33,8 @@
 #                                     
     programs.neovim = {
         enable = true;
+        withRuby = false;
+        withPython3 = false;
 
         viAlias = true;
         vimAlias = true;
@@ -81,7 +83,7 @@
                 nvim-treesitter.withAllGrammars
 
                 comment-nvim
-                vim-be-good
+                # vim-be-good
 
                 which-key-nvim
                 harpoon2
@@ -92,7 +94,7 @@
             rust-analyzer
         ];
 
-        extraLuaConfig = ''
+        initLua = ''
             ${builtins.readFile ./options.lua}
         ${builtins.readFile ./plugins/treesitter.lua}
         ${builtins.readFile ./plugins/neotree.lua}

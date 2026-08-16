@@ -45,6 +45,7 @@
 
         # Modules:
         ../../modules/networking-lannister.nix
+        ../../modules/networking-shared.nix
         ../../modules/users.nix
         ../../modules/devices.nix
         ../../modules/settings.nix

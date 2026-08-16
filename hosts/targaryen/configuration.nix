@@ -44,6 +44,7 @@
 
         # Modules:
         ../../modules/networking-targaryen.nix
+        ../../modules/networking-shared.nix
         ../../modules/users.nix
         ../../modules/devices.nix
         ../../modules/settings.nix
@@ -59,7 +60,7 @@
 
     services.xserver = {
         enable = true;
-        layout = "us";
+        xkb.layout = "us";
     };
 
     # Yubikey Setup for sudo

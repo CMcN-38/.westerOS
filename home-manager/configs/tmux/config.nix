@@ -38,9 +38,9 @@
       set -g mouse on
       set-option -sa terminal-features ',alacritty:RGB'
       set -g base-index 1
-      unbind C-b
-      set -g prefix C-h
-      bind C-h send-prefix
+      # unbind C-b
+      # set -g prefix C-h
+      # bind C-h send-prefix
       bind '"' split-window -v -c "#{pane_current_path}"
       bind % split-window -h -c "#{pane_current_path}"
       # bind C-f tmux-sessioniser

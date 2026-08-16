@@ -8,6 +8,7 @@ wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
+    # configType = "hyprlang";
     extraConfig =
         ''
           env = NIXOS_OZONE_WL, 1
@@ -30,16 +31,14 @@ wayland.windowManager.hyprland = {
           exec-once = lxqt-policykit-agent
     exec-once = waybar
     exec-once = swaync
-    exec-once = sudo logid
     exec-once = streamdeck -n
     # exec-once = swww-daemon #Wallpaper
     exec-once = swaybg -i /home/cameron/.themes/current/background
     exec-once = hypridle
     exec-once = thunar --daemon #Start file manager daemon in the background
     exec-once = goxlr-daemon --http-disable
-    exec-once = emac --daemon
+    exec-once = emacs --daemon
     exec-once = solaar -w hide
-    exec-once = syncthing
           # monitor=,preferred,auto,1
     monitor=,3840x2160@60,auto,1
 
@@ -91,17 +90,22 @@ wayland.windowManager.hyprland = {
         windowrule = float true, match:class ^(Rofi)$
         windowrule = center true, match:class ^(Rofi)$
         # windowrule = size 1000 350, class:^(Rofi)$
+   # PiP 
+    windowrule = float true, match:title ^(Picture-in-Picture)$
+    windowrule = move 83% 85%, match:title ^(Picture-in-Picture)$
+    windowrule = size 1500 1000, match:class thunar
 
     #Workspaces
     # windowrule = workspace 3, title:^(.\*Espanso.\*)$
     # windowrule = workspace 3, title:^(Espanso Sync Tool)$
-    
 
     windowrule = workspace 1, match:class ^(kitty)$
     windowrule = workspace 2, match:class ^(zen)$ 
     windowrule = workspace 3, match:class ^(Cider)$
     windowrule = workspace 4, match:class ^(discord)$ 
-    windowrule = workspace 5, match:class obsidian
+    windowrule = workspace 4, match:title ^(Proton Mail)$ 
+    windowrule = workspace 5, match:class ^(electron)$ 
+    # windowrule = workspace 6, match:initialTitle .*Obsidian.*
     windowrule = workspace 9, match:class transmission-gtk
 
     # Transparency Rules
@@ -113,6 +117,7 @@ wayland.windowManager.hyprland = {
     windowrule = opacity 0.95, match:class ^(discord)$
     windowrule = opacity 0.95, match:class ^(Cider)$
     windowrule = opacity 0.95, match:class ^(Emacs)$
+    windowrule = opacity 0.95, match:title ^(Proton Mail)$
     # windowrule = opacity 0.85, ^(kitty)$
     # Layer Rules
     layerrule = blur true, match:class ^(swaync)$
@@ -189,6 +194,7 @@ wayland.windowManager.hyprland = {
     bind = $mainMod, O, exec, obsidian
     bind = $mainMod, C, exec, westerOS_launch_cider
     bind = $mainMod, D, exec, discordptb
+    bind = $mainMod, M, exec, proton-mail
     bind = $mainMod, I, exec, westerOS_launch_iptv
 
     # Move focus with mainMod + arrow keys
@@ -242,15 +248,15 @@ wayland.windowManager.hyprland = {
 
     # Screenshots
     bind = $mainMod, S, exec, westerOS_screenshot
-    # bind = $mainMod, S, exec, gradia --screenshot
 
     # Autolauch
     exec-once = kitty
     exec-once = appimage-run -d /home/cameron/2_desktop/zen-specific.AppImage
     exec-once = westerOS_launch_cider
     exec-once = discordptb
-    exec-once = obsidian
+    exec-once = [workspace 5 silent] obsidian
     exec-once = transmission-gtk
+    exec-once = proton-mail
     
     $osdclient = swayosd-client --monitor "$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')"
 

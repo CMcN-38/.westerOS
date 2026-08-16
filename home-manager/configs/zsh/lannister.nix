@@ -1,6 +1,7 @@
 # home.nix
 {
   config,
+  lib,
   pkgs,
   ...
 }: {
@@ -60,7 +61,8 @@
     wallpaperDir = "/home/cameron/4_media/41_wallpapers/4k/";
   };
 
-  programs.zsh.initExtraFirst = ''
+  programs.zsh.initContent = lib.mkMerge [
+    (lib.mkBefore ''
     setopt correct # correct spelling errors
     setopt extendedglob # enable extended globbing
     setopt nocaseglob # case insensitive globbing
@@ -69,9 +71,8 @@
     setopt appendhistory # append to the history file, don't overwrite it
     setopt histignorealldups # don't record duplicates in the history
     setopt inc_append_history # add commands to the history file as they are run
-  '';
-
-  programs.zsh.initExtra = ''
+    '')
+    ''
     bindkey -s "^F" "/usr/local/bin/tmux-sessioniser"
 
     plugins=(git)
@@ -131,5 +132,5 @@
     export PATH="$HOME/.cargo/bin:$PATH"
 
     eval "$(zoxide init --cmd cd zsh)"
-  '';
+  ''];
 }
