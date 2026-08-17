@@ -37,8 +37,9 @@
 
     hardware.logitech.wireless = {
         enable = true;
-        enableGraphical = true;
     };
+
+    programs.solaar.enable = true;
 
     security.rtkit.enable = true;
     services = {

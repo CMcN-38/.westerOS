@@ -124,8 +124,8 @@ wayland.windowManager.hyprland = {
                   },
               },
 
-              gestures = {
-                  workspace_swipe_distance = 1200,
+              gesture = {
+                  fingers = 3, direction = "horizontal", action = "workspace"
               },
 
               misc = {
