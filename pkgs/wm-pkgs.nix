@@ -77,6 +77,7 @@ slurp                       # screenshot component
         extraPackages = with pkgs; [
             kdePackages.qt5compat      # provides Qt5Compat modules
         ];
+        settings.Wayland.EnableHiDPI = false;
     };
 
 

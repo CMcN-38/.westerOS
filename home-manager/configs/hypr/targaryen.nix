@@ -8,266 +8,248 @@ wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
-    # configType = "hyprlang";
+    configType = "lua";
     extraConfig =
         ''
-          env = NIXOS_OZONE_WL, 1
-          env = NIXPKGS_ALLOW_UNFREE, 1
-          env = XDG_CURRENT_DESKTOP, Hyprland
-          env = XDG_SESSION_TYPE, wayland
-          env = XDG_SESSION_DESKTOP, Hyprland
-          env = GDK_BACKEND, wayland, x11
-          env = CLUTTER_BACKEND, wayland
-          env = QT_QPA_PLATFORM=wayland;xcb
-          env = QT_WAYLAND_DISABLE_WINDOWDECORATION, 1
-          env = QT_AUTO_SCREEN_SCALE_FACTOR, 1
-          env = SDL_VIDEODRIVER, x11
-          env = MOZ_ENABLE_WAYLAND, 1
-        exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR DISPLAY
-        exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR DISPLAY
-          # exec-once = dbus-update-activation-environment --systemd --all
-          # exec-once = systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-          exec-once = nm-applet --indicator
-          exec-once = lxqt-policykit-agent
-    exec-once = waybar
-    exec-once = swaync
-    exec-once = streamdeck -n
-    # exec-once = swww-daemon #Wallpaper
-    exec-once = swaybg -i /home/cameron/.themes/current/background
-    exec-once = hypridle
-    exec-once = thunar --daemon #Start file manager daemon in the background
-    exec-once = goxlr-daemon --http-disable
-    exec-once = emacs --daemon
-    exec-once = solaar -w hide
-          # monitor=,preferred,auto,1
-    monitor=,3840x2160@60,auto,1
+          --------------------
+          ---- MONITOR -------
+          --------------------
 
-    # Set programs that you use
-    $terminal = kitty
-    $fileManager = thunar
-    $menu = rofi -show drun
-    $browser = appimage-run -d /home/cameron/2_desktop/zen-specific.AppImage
-    # $browser = firefox
+          hl.monitor({
+              output   = "",
+              mode     = "3840x2160@60",
+              position = "auto",
+              scale    = 1,
+          })
 
-          general {
-            gaps_in = 5
-            gaps_out = 5
-            border_size = 3
-            layout = dwindle
-            resize_on_border = true
-            col.active_border = rgba(6ee9f8ff) 
-            col.inactive_border = rgba(4e112aff)
-            # allow_tearing = false
-          }
-          input {
-            kb_options = grp:alt_shift_toggle
-            kb_options = caps:super
-            follow_mouse = 1
-            touchpad {
-              natural_scroll = true
-              disable_while_typing = false
-              scroll_factor = 0.2
-            }
-            sensitivity = 1 # -1.0 - 1.0, 0 means no modification.
-            accel_profile = flat
-          }
+          --------------------
+          ---- PROGRAMS ------
+          --------------------
 
+          local terminal    = "kitty"
+          local fileManager = "thunar"
+          local menu        = "rofi -show drun"
+          local browser     = "appimage-run -d /home/cameron/2_desktop/zen-specific.AppImage"
+          local mainMod     = "SUPER"
+          local osdclient   = [[swayosd-client --monitor "$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')"]]
 
-    windowrule = float true, match:class thunar
-    windowrule = center true, match:class thunar
-    windowrule = size 2500 1000, match:class thunar
+          -------------------
+          ---- ENV VARS ------
+          -------------------
 
-    #Pulse Audio
-    # windowrule = float, class:^(org.pulseaudio.pavucontrol)$, 
-    # windowrule = move 83% 2.5%, class:^(org.pulseaudio.pavucontrol)$
-    # windowrule = size 600 1000, class:^(org.pulseaudio.pavucontrol)$
-    windowrule = float true, match:class ^(Volume Control)$, 
-    windowrule = move 83% 2.5%, match:class ^(Volume Control)$
-    windowrule = size (600) (1000), match:class ^(Volume Control)$
+          hl.env("NIXOS_OZONE_WL", "1")
+          hl.env("NIXPKGS_ALLOW_UNFREE", "1")
+          hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
+          hl.env("XDG_SESSION_TYPE", "wayland")
+          hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+          hl.env("GDK_BACKEND", "wayland,x11")
+          hl.env("CLUTTER_BACKEND", "wayland")
+          hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+          hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+          hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
+          hl.env("SDL_VIDEODRIVER", "x11")
+          hl.env("MOZ_ENABLE_WAYLAND", "1")
 
+          -------------------
+          ---- AUTOSTART ----
+          -------------------
 
-        #Rofi
-        windowrule = float true, match:class ^(Rofi)$
-        windowrule = center true, match:class ^(Rofi)$
-        # windowrule = size 1000 350, class:^(Rofi)$
-   # PiP 
-    windowrule = float true, match:title ^(Picture-in-Picture)$
-    windowrule = move 83% 85%, match:title ^(Picture-in-Picture)$
-    windowrule = size 1500 1000, match:class thunar
+          hl.on("hyprland.start", function()
+              hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR DISPLAY")
+              hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR DISPLAY")
+              hl.exec_cmd("nm-applet --indicator")
+              hl.exec_cmd("lxqt-policykit-agent")
+              hl.exec_cmd("waybar")
+              hl.exec_cmd("swaync")
+              hl.exec_cmd("streamdeck -n")
+              hl.exec_cmd("swaybg -i /home/cameron/.themes/current/background")
+              hl.exec_cmd("hypridle")
+              hl.exec_cmd("thunar --daemon")
+              hl.exec_cmd("goxlr-daemon --http-disable")
+              hl.exec_cmd("emacs --daemon")
+              hl.exec_cmd("solaar -w hide")
+              hl.exec_cmd(terminal)
+              hl.exec_cmd(browser)
+              hl.exec_cmd("westerOS_launch_cider")
+              hl.exec_cmd("discordptb")
+              hl.exec_cmd("[workspace 5 silent] obsidian")
+              hl.exec_cmd("transmission-gtk")
+              hl.exec_cmd("proton-mail")
+          end)
 
-    #Workspaces
-    # windowrule = workspace 3, title:^(.\*Espanso.\*)$
-    # windowrule = workspace 3, title:^(Espanso Sync Tool)$
+          -----------------------
+          ---- LOOK AND FEEL ----
+          -----------------------
 
-    windowrule = workspace 1, match:class ^(kitty)$
-    windowrule = workspace 2, match:class ^(zen)$ 
-    windowrule = workspace 3, match:class ^(Cider)$
-    windowrule = workspace 4, match:class ^(discord)$ 
-    windowrule = workspace 4, match:title ^(Proton Mail)$ 
-    windowrule = workspace 5, match:class ^(electron)$ 
-    # windowrule = workspace 6, match:initialTitle .*Obsidian.*
-    windowrule = workspace 9, match:class transmission-gtk
+          hl.config({
+              general = {
+                  gaps_in          = 5,
+                  gaps_out         = 5,
+                  border_size      = 3,
+                  layout           = "dwindle",
+                  resize_on_border = true,
+                  col = {
+                      active_border   = "rgba(6ee9f8ff)",
+                      inactive_border = "rgba(4e112aff)",
+                  },
+              },
 
-    # Transparency Rules
-    # windowrule = match:opacity 1, match:class ^(firefox)$
-    windowrule = opacity 0.95, match:class ^(firefox)$
-    # windowrule = opacity 1, match:class ^(Zen Browser)$
-    windowrule = opacity 0.95, match:class ^(zen)$
-    windowrule = opacity 1, match:title ^(.*YouTube.*)$
-    windowrule = opacity 0.95, match:class ^(discord)$
-    windowrule = opacity 0.95, match:class ^(Cider)$
-    windowrule = opacity 0.95, match:class ^(Emacs)$
-    windowrule = opacity 0.95, match:title ^(Proton Mail)$
-    # windowrule = opacity 0.85, ^(kitty)$
-    # Layer Rules
-    layerrule = blur true, match:class ^(swaync)$
-    layerrule = blur true, match:class ^(waybar)$
+              decoration = {
+                  rounding = 8,
+                  blur = {
+                      enabled = false,
+                      size    = 3,
+                      passes  = 1,
+                  },
+                  shadow = {
+                      enabled      = true,
+                      range        = 4,
+                      render_power = 3,
+                      color        = "rgba(1a1a1aee)",
+                  },
+              },
 
+              animations = {
+                  enabled = true,
+              },
 
-          gestures {
-            # workspace_swipe = true
-            # workspace_swipe_fingers = 3
-            workspace_swipe_distance = 1200
-          }
-          misc {
-            initial_workspace_tracking = 0
-            mouse_move_enables_dpms = true
-            key_press_enables_dpms = false
-            # vrr = 1
-            force_default_wallpaper = 0
-            
-          }
-          ecosystem {
-                no_update_news = true
-          }
-          animations {
-          
-              enabled = yes
+              input = {
+                  kb_options    = "caps:super",
+                  follow_mouse  = 1,
+                  sensitivity   = 1,
+                  accel_profile = "flat",
+                  touchpad = {
+                      natural_scroll       = true,
+                      disable_while_typing = false,
+                      scroll_factor        = 0.2,
+                  },
+              },
 
-                  bezier = myBezier, 0.05, 0.9, 0.1, 1.05
+              gestures = {
+                  workspace_swipe_distance = 1200,
+              },
 
-                  animation = windows, 1, 7, myBezier
-                  animation = windowsOut, 1, 7, default, popin 80%
-                  animation = border, 1, 10, default
-                  animation = borderangle, 1, 8, default
-                  animation = fade, 1, 7, default
-                  animation = workspaces, 1, 6, default
-          }
+              misc = {
+                  initial_workspace_tracking = 0,
+                  mouse_move_enables_dpms    = true,
+                  key_press_enables_dpms     = false,
+                  force_default_wallpaper    = 0,
+              },
 
-          decoration {
-            rounding = 8
-            blur {
-                enabled = false
-                size = 3
-                passes = 1
-                new_optimizations = on
-                ignore_opacity = off
-            }
-            shadow {
-                enabled = true
-                range = 4
-                render_power = 3
-                color = rgba(1a1a1aee)
-                }
-          }
-          plugin {
-            hyprtrails {
-            }
-          }
-          dwindle {
-            pseudotile = true
-            preserve_split = true
-          }
+              ecosystem = {
+                  no_update_news = true,
+              },
 
-    $mainMod = SUPER
+              dwindle = {
+                  preserve_split = true,
+              },
 
-    # Basic app control bindings
-    bind = $mainMod, RETURN, exec, $terminal
-    bind = $mainMod, Q, killactive,
-    # bind = $mainMod, M, exit,
-    bind = $mainMod, F, exec, $fileManager
-    bind = $mainMod, V, togglefloating,
-    bind = $mainMod, SPACE, exec, $menu
-    bind = $mainMod, P, pseudo, # dwindle
-    bind = $mainMod, J, togglesplit, # dwindle
-    bind = $mainMod, Z, exec, $browser
-    bind = $mainMod, O, exec, obsidian
-    bind = $mainMod, C, exec, westerOS_launch_cider
-    bind = $mainMod, D, exec, discordptb
-    bind = $mainMod, M, exec, proton-mail
-    bind = $mainMod, I, exec, westerOS_launch_iptv
+              plugin = {
+                  hyprtrails = {},
+              },
+          })
 
-    # Move focus with mainMod + arrow keys
-    bind = $mainMod, left, movefocus, l
-    bind = $mainMod, right, movefocus, r
-    bind = $mainMod, up, movefocus, u
-    bind = $mainMod, down, movefocus, d
+          --------------------
+          ---- ANIMATIONS ----
+          --------------------
 
-    # Switch workspaces with mainMod + [0-9]
-    bind = $mainMod, 1, workspace, 1
-    bind = $mainMod, 2, workspace, 2
-    bind = $mainMod, 3, workspace, 3
-    bind = $mainMod, 4, workspace, 4
-    bind = $mainMod, 5, workspace, 5
-    bind = $mainMod, 6, workspace, 6
-    bind = $mainMod, 7, workspace, 7
-    bind = $mainMod, 8, workspace, 8
-    bind = $mainMod, 9, workspace, 9
-    bind = $mainMod, 0, workspace, 10
+          hl.curve("myBezier", { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
 
-    # Move active window to a workspace with mainMod + SHIFT + [0-9]
-    bind = $mainMod SHIFT, 1, movetoworkspace, 1
-    bind = $mainMod SHIFT, 2, movetoworkspace, 2
-    bind = $mainMod SHIFT, 3, movetoworkspace, 3
-    bind = $mainMod SHIFT, 4, movetoworkspace, 4
-    bind = $mainMod SHIFT, 5, movetoworkspace, 5
-    bind = $mainMod SHIFT, 6, movetoworkspace, 6
-    bind = $mainMod SHIFT, 7, movetoworkspace, 7
-    bind = $mainMod SHIFT, 8, movetoworkspace, 8
-    bind = $mainMod SHIFT, 9, movetoworkspace, 9
-    bind = $mainMod SHIFT, 0, movetoworkspace, 10
+          hl.animation({ leaf = "windows",     enabled = true, speed = 7,  bezier = "myBezier" })
+          hl.animation({ leaf = "windowsOut",  enabled = true, speed = 7,  bezier = "default",  style = "popin 80%" })
+          hl.animation({ leaf = "border",      enabled = true, speed = 10, bezier = "default" })
+          hl.animation({ leaf = "borderangle", enabled = true, speed = 8,  bezier = "default" })
+          hl.animation({ leaf = "fade",        enabled = true, speed = 7,  bezier = "default" })
+          hl.animation({ leaf = "workspaces",  enabled = true, speed = 6,  bezier = "default" })
 
-    # Example special workspace (scratchpad)
-    #bind = $mainMod, S, togglespecialworkspace, magic
-    #bind = $mainMod SHIFT, S, movetoworkspace, special:magic
+          -----------------------
+          ---- WINDOW RULES -----
+          -----------------------
 
-    # Scroll through existing workspaces with mainMod + scroll
-    bind = $mainMod, mouse_down, workspace, e+1
-    bind = $mainMod, mouse_up, workspace, e-1
-    bind = $mainMod CTRL, right, workspace, e+1
-    bind = $mainMod CTRL, left, workspace, e-1
+          hl.window_rule({ match = { class = "thunar" },              float = true, center = true, size = "1500 1000" })
+          hl.window_rule({ match = { class = "^(Volume Control)$" },  float = true, move = "83% 2.5%", size = "600 1000" })
+          hl.window_rule({ match = { class = "^(Rofi)$" },            float = true, center = true })
+          hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, move = "83% 85%", size = "1500 1000" })
 
-    # Move/resize windows with mainMod + LMB/RMB and dragging
-    bindm = $mainMod, mouse:272, movewindow
-    bindm = $mainMod, mouse:273, resizewindow
+          -- Workspace assignments
+          hl.window_rule({ match = { class = "^(kitty)$" },           workspace = 1 })
+          hl.window_rule({ match = { class = "^(zen)$" },             workspace = 2 })
+          hl.window_rule({ match = { class = "^(Cider)$" },           workspace = 3 })
+          hl.window_rule({ match = { class = "^(discord)$" },         workspace = 4 })
+          hl.window_rule({ match = { title = "^(Proton Mail)$" },     workspace = 4 })
+          hl.window_rule({ match = { class = "^(electron)$" },        workspace = 5 })
+          hl.window_rule({ match = { class = "transmission-gtk" },    workspace = 9 })
 
-    # Wallpapers
-    bind = $mainMod, W, exec, westerOS_bg_next
-    bind = $mainMod SHIFT, W, exec, westerOS_theme_set catppuccin
-    bind = $mainMod , Delete, exec, snippetexpandergui -s
+          -- Transparency
+          hl.window_rule({ match = { class = "^(firefox)$" },         opacity = 0.95 })
+          hl.window_rule({ match = { class = "^(zen)$" },             opacity = 0.95 })
+          hl.window_rule({ match = { title = "^(.*YouTube.*)$" },     opacity = 1 })
+          hl.window_rule({ match = { class = "^(discord)$" },         opacity = 0.95 })
+          hl.window_rule({ match = { class = "^(Cider)$" },           opacity = 0.95 })
+          hl.window_rule({ match = { class = "^(Emacs)$" },           opacity = 0.95 })
+          hl.window_rule({ match = { title = "^(Proton Mail)$" },     opacity = 0.95 })
 
-    # Screenshots
-    bind = $mainMod, S, exec, westerOS_screenshot
+          -- Layer rules
+          hl.layer_rule({ match = { namespace = "^(swaync)$" }, blur = true })
+          hl.layer_rule({ match = { namespace = "^(waybar)$" },  blur = true })
 
-    # Autolauch
-    exec-once = kitty
-    exec-once = appimage-run -d /home/cameron/2_desktop/zen-specific.AppImage
-    exec-once = westerOS_launch_cider
-    exec-once = discordptb
-    exec-once = [workspace 5 silent] obsidian
-    exec-once = transmission-gtk
-    exec-once = proton-mail
-    
-    $osdclient = swayosd-client --monitor "$(hyprctl monitors -j | jq -r '.[] | select(.focused == true).name')"
+          ---------------------
+          ---- KEYBINDINGS ----
+          ---------------------
 
-    bindeld = ,XF86AudioRaiseVolume, Volume up, exec, $osdclient --output-volume raise
-    bindeld = ,XF86AudioLowerVolume, Volume up, exec, $osdclient --output-volume lower
-    bindeld = ,XF86AudioMute, Volume up, exec, $osdclient --output-volume mute-toggle
+          -- Basic controls
+          hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
+          hl.bind(mainMod .. " + Q",      hl.dsp.window.close())
+          hl.bind(mainMod .. " + F",      hl.dsp.exec_cmd(fileManager))
+          hl.bind(mainMod .. " + V",      hl.dsp.window.float({ action = "toggle" }))
+          hl.bind(mainMod .. " + SPACE",  hl.dsp.exec_cmd(menu))
+          hl.bind(mainMod .. " + P",      hl.dsp.window.pseudo())
+          hl.bind(mainMod .. " + J",      hl.dsp.layout("togglesplit"))
+          hl.bind(mainMod .. " + Z",      hl.dsp.exec_cmd(browser))
+          hl.bind(mainMod .. " + O",      hl.dsp.exec_cmd("obsidian"))
+          hl.bind(mainMod .. " + C",      hl.dsp.exec_cmd("westerOS_launch_cider"))
+          hl.bind(mainMod .. " + D",      hl.dsp.exec_cmd("discordptb"))
+          hl.bind(mainMod .. " + M",      hl.dsp.exec_cmd("proton-mail"))
+          hl.bind(mainMod .. " + I",      hl.dsp.exec_cmd("westerOS_launch_iptv"))
 
-    bindeld = ,XF86MonBrightnessUp, Brightness up, exec, westerOS_brightness_display +10%
-    bindeld = ,XF86MonBrightnessDown, Brightness down, exec, westerOS_brightness_display -10%
+          -- Focus
+          hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
+          hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
+          hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
+          hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
 
-    # bindeld = ,XF86AudioPlay, exec, $osdclient --playerctl play-pause
+          -- Workspaces
+          for i = 1, 9 do
+              hl.bind(mainMod .. " + " .. i,         hl.dsp.focus({ workspace = i }))
+              hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i }))
+          end
+          hl.bind(mainMod .. " + 0",         hl.dsp.focus({ workspace = 10 }))
+          hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = 10 }))
+
+          -- Workspace scroll
+          hl.bind(mainMod .. " + mouse_down",   hl.dsp.focus({ workspace = "e+1" }))
+          hl.bind(mainMod .. " + mouse_up",     hl.dsp.focus({ workspace = "e-1" }))
+          hl.bind(mainMod .. " + CTRL + right", hl.dsp.focus({ workspace = "e+1" }))
+          hl.bind(mainMod .. " + CTRL + left",  hl.dsp.focus({ workspace = "e-1" }))
+
+          -- Move/resize with mouse
+          hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+          hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+
+          -- Wallpaper / theme
+          hl.bind(mainMod .. " + W",         hl.dsp.exec_cmd("westerOS_bg_next"))
+          hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("westerOS_theme_set catppuccin"))
+          hl.bind(mainMod .. " + Delete",    hl.dsp.exec_cmd("snippetexpandergui -s"))
+
+          -- Screenshot
+          hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("westerOS_screenshot"))
+
+          -- OSD / Media keys
+          hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd(osdclient .. " --output-volume raise"),       { locked = true, repeating = true })
+          hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd(osdclient .. " --output-volume lower"),       { locked = true, repeating = true })
+          hl.bind("XF86AudioMute",         hl.dsp.exec_cmd(osdclient .. " --output-volume mute-toggle"), { locked = true, repeating = true })
+          hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("westerOS_brightness_display +10%"),          { locked = true, repeating = true })
+          hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("westerOS_brightness_display -10%"),          { locked = true, repeating = true })
         '';
 };
         services.hypridle = {
@@ -316,39 +298,6 @@ wayland.windowManager.hyprland = {
                                         bezier = "easeOutQuint";
                                 };
                         };
-
-                        # background = [
-                        #         {
-                        #                 path = "screenshot";
-                        #                 blur_passes = 3;
-                        #                 blur_size = 8;
-                        #         }
-                        # ];
-
-                        # input-field = [
-                        #         {
-                        #                 size = "650, 100";
-                        #                 position = "0, 0";
-                        #                 monitor = "";
-                        #                 halign = "center";
-                        #                 valign = "center";
-                        #
-                        #                 dots_center = true;
-                        #                 fade_on_empty = false;
-                        #
-                        #                 font_color = "rgb(205, 214, 244)";
-                        #                 inner_color = "rgb(127, 132, 156)";
-                        #                 outer_color = "rgb(30, 30, 46)";
-                        #                 outline_thickness = 5;
-                        #                 rounding = 25;
-                        #
-                        #                 placeholder_text = "...";
-                        #                 fail_text = "Try again...";
-                        #                 shadow_passes = 0;
-                        #                 
-                        #         }
-                        # ];
                 };
         };
 }
-
