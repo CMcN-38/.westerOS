@@ -31,8 +31,10 @@
 }: {
   imports = [
     ../../home-manager/configs/home-shared.nix
+    ../../home-manager/configs/email/config.nix
     ../../home-manager/configs/hypr/baratheon.nix
-    ../../home-manager/configs/zsh/targaryen.nix
+    ../../home-manager/configs/zsh/baratheon.nix
+    ../../home-manager/configs/walker/config.nix
 
     inputs.walker.homeManagerModules.default
   ];
@@ -44,8 +46,6 @@
     enable = true;
     resyncTimer = "1h";
   };
-
-  programs.walker.enable = true;
 
   # WesterOS Battery Monitor - alerts when battery is low
   systemd.user.services.westerOS-battery-monitor = {

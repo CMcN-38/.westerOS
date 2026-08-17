@@ -31,15 +31,26 @@
 }: {
   imports = [
     ../../home-manager/configs/home-shared.nix
+    ../../home-manager/configs/email/config.nix
     ../../home-manager/configs/hypr/lannister.nix
     ../../home-manager/configs/zsh/lannister.nix
+    ../../home-manager/configs/walker/config.nix
+
+    inputs.walker.homeManagerModules.default
   ];
+
+  # Profile-sync-daemon - keeps browser profile in RAM for faster launches
+  services.psd = {
+    enable = true;
+    resyncTimer = "1h";
+  };
 
   # Configure XDG user directories
   xdg.userDirs = {
     enable = true;
     createDirectories = false;
     setSessionVariables = false;
+    documents = "${config.home.homeDirectory}/1_documents";
     desktop = "${config.home.homeDirectory}/2_desktop";
     download = "${config.home.homeDirectory}/3_downloads";
   };

@@ -57,7 +57,7 @@
       };
 
       nixosConfigurations.baratheon = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs secrets; };
         modules = [
           ./hosts/baratheon/configuration.nix
           home-manager.nixosModules.default
@@ -66,7 +66,7 @@
       };
 
       nixosConfigurations.lannister = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs secrets; };
         modules = [
           ./hosts/lannister/configuration.nix
           home-manager.nixosModules.default
