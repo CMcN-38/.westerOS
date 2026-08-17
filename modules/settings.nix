@@ -28,7 +28,6 @@
 
 {
     pkgs,
-    secrets,
     ...
 }: {
 
@@ -47,10 +46,6 @@
     programs.nix-ld.enable = true;
 
     nix.settings.experimental-features = ["nix-command" "flakes"];
-
-    nix.extraConfig = ''
-      access-tokens = github.com=${secrets.githubToken}
-    '';
 
 #    
 #    ▗▄▄▖  ▗▄▖  ▗▄▖▗▄▄▄▖▗▖    ▗▄▖  ▗▄▖ ▗▄▄▄ ▗▄▄▄▖▗▄▄▖ 
