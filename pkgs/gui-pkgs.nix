@@ -61,6 +61,8 @@ in {
     protonmail-bridge
     protonmail-desktop
     
+rpi-imager
+
     mpv                         # multimedia player
     obsidian                    # pkm notes
     obs-studio                  # screen recording

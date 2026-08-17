@@ -71,13 +71,15 @@ slurp                       # screenshot component
 
     services.displayManager.sddm = {
         enable = true;
+        enableHidpi = false;
         wayland.enable = true;
 # theme = "catppuccin-sddm-corners";
         theme = "where_is_my_sddm_theme";
         extraPackages = with pkgs; [
             kdePackages.qt5compat      # provides Qt5Compat modules
         ];
-        settings.Wayland.EnableHiDPI = false;
+        # settings.Wayland.EnableHiDPI = true;
+        # settings.Wayland.ScaleFactor = 1;
     };
 
 
