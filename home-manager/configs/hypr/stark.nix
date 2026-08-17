@@ -189,8 +189,8 @@ wayland.windowManager.hyprland = {
           hl.layer_rule({ match = { namespace = "^(waybar)$" },  blur = true })
 
           -- Gestures
-          hl.gesture(3, "horizontal", "workspace")
-          hl.gesture(4, "horizontal", "workspace")
+          hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+          hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
 
           ---------------------
           ---- KEYBINDINGS ----
