@@ -48,18 +48,9 @@
       };
 
       nixosConfigurations.stark = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hosts/stark/configuration.nix
-          home-manager.nixosModules.default
-          nix-index-database.nixosModules.default
-        ];
-      };
-
-      nixosConfigurations.baratheon = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs secrets; };
         modules = [
-          ./hosts/baratheon/configuration.nix
+          ./hosts/stark/configuration.nix
           home-manager.nixosModules.default
           nix-index-database.nixosModules.default
         ];

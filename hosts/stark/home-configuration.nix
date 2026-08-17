@@ -32,8 +32,8 @@
   imports = [
     ../../home-manager/configs/home-shared.nix
     ../../home-manager/configs/email/config.nix
-    ../../home-manager/configs/hypr/baratheon.nix
-    ../../home-manager/configs/zsh/baratheon.nix
+    ../../home-manager/configs/hypr/stark.nix
+    ../../home-manager/configs/zsh/stark.nix
     ../../home-manager/configs/walker/config.nix
 
     inputs.walker.homeManagerModules.default

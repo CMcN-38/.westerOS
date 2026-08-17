@@ -38,7 +38,7 @@
 #                                                       
 
     networking = {
-        hostName = "baratheon";
+        hostName = "stark";
 
         # Configure the IP address
         networkmanager.enable = true;

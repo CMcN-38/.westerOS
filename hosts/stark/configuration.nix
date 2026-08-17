@@ -43,10 +43,10 @@
 
 
         # Modules:
-        ../../modules/networking-baratheon.nix
+        ../../modules/networking-stark.nix
         ../../modules/networking-shared.nix
         ../../modules/users.nix
-        ../../modules/devices-baratheon.nix
+        ../../modules/devices-stark.nix
         ../../modules/settings.nix
         ../../modules/style.nix
         ../../modules/fan-control.nix
