@@ -25,92 +25,94 @@
   inputs,
   ...
 }: {
-#•
-#┓┏┳┓┏┓┏┓┏┓╋┏
-#┗┛┗┗┣┛┗┛┛ ┗┛
-#    ┛
+  #•
+  #┓┏┳┓┏┓┏┓┏┓╋┏
+  #┗┛┗┗┣┛┗┛┛ ┗┛
+  #    ┛
 
-    imports = [
-        # Include the results of the hardware scan.
-        ./hardware-configuration.nix
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
 
-        # Packages:
-        ../../pkgs/gui-pkgs.nix
-        ../../pkgs/serv-pkgs.nix
-        ../../pkgs/term-pkgs.nix
-        ../../pkgs/wm-pkgs.nix
-        ../../pkgs/fonts.nix
+    # Packages:
+    ../../pkgs/gui-pkgs.nix
+    ../../pkgs/serv-pkgs.nix
+    ../../pkgs/term-pkgs.nix
+    ../../pkgs/wm-pkgs.nix
+    ../../pkgs/fonts.nix
 
+    # Modules:
+    ../../modules/networking-stark.nix
+    ../../modules/networking-shared.nix
+    ../../modules/users.nix
+    ../../modules/devices-stark.nix
+    ../../modules/settings.nix
+    ../../modules/style.nix
+    ../../modules/fan-control.nix
+  ];
 
-        # Modules:
-        ../../modules/networking-stark.nix
-        ../../modules/networking-shared.nix
-        ../../modules/users.nix
-        ../../modules/devices-stark.nix
-        ../../modules/settings.nix
-        ../../modules/style.nix
-        ../../modules/fan-control.nix
-    ];
+  # Packages to enable yubikey use
+  # environment.systemPackages = with pkgs; [
+  #     yubikey-manager
+  #     pam_u2f
+  #     libfido2
+  # ];
 
-    # Packages to enable yubikey use
-    # environment.systemPackages = with pkgs; [
-    #     yubikey-manager
-    #     pam_u2f
-    #     libfido2
-    # ];
-
-    # Packages to enable fingerprint
-    services.fwupd.enable = true;
-    services.fprintd.enable = true;
-    # services.fprintd.tod.enable = true;
-
-    console = {
-        keyMap = "dvorak";
+  # Remap physical Escape → Ctrl+B (tmux prefix) via keyd (pre-xkb)
+  # CapsLock is unaffected and still maps to Escape via xkb kb_options
+  services.keyd = {
+    enable = true;
+    keyboards.default = {
+      ids = ["*"];
+      settings.main.esc = "C-n";
     };
+  };
 
-    # Disable WiFi power management for better signal stability (MT7925 chipset)
-    boot.extraModprobeConfig = ''
-      options mt7925e power_save=0
-    '';
+  # Packages to enable fingerprint
+  services.fwupd.enable = true;
+  services.fprintd.enable = true;
+  # services.fprintd.tod.enable = true;
 
-    # Yubikey Setup for sudo
-#     services.pcscd.enable = true;
-    security.polkit.enable = true;
-    security.pam.services = {
-        sudo.fprintAuth = true;
-        sudo.unixAuth = true;
-        login.fprintAuth = true;
-        login.unixAuth = true;
-        sddm.fprintAuth = true;
-    };
+  console = {
+    keyMap = "dvorak";
+  };
 
-    # Battery Saver Mode - Sudo permissions
-    security.sudo.extraRules = [
-        # {
-        #     users = [ "cameron" ];
-        #     commands = [
-        #         {
-        #             command = "/run/current-system/sw/bin/tee /sys/class/leds/chromeos::kbd_backlight/brightness";
-        #             options = [ "NOPASSWD" ];
-        #         }
-        #     ];
-        # }
+  # Disable WiFi power management for better signal stability (MT7925 chipset)
+  boot.extraModprobeConfig = ''
+    options mt7925e power_save=0
+  '';
+
+  # Yubikey Setup for sudo
+  #     services.pcscd.enable = true;
+  security.polkit.enable = true;
+  security.pam.services = {
+    sudo.fprintAuth = true;
+    sudo.unixAuth = true;
+    login.fprintAuth = true;
+    login.unixAuth = true;
+    sddm.fprintAuth = true;
+  };
+
+  # Battery Saver Mode - Sudo permissions
+  security.sudo.extraRules = [
+    # {
+    #     users = [ "cameron" ];
+    #     commands = [
+    #         {
+    #             command = "/run/current-system/sw/bin/tee /sys/class/leds/chromeos::kbd_backlight/brightness";
+    #             options = [ "NOPASSWD" ];
+    #         }
+    #     ];
+    # }
+    {
+      users = ["cameron"];
+      commands = [
         {
-            users = [ "cameron" ];
-            commands = [
-                {
-                    command = "/run/current-system/sw/bin/tee /sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq";
-                    options = [ "NOPASSWD" ];
-                }
-            ];
+          command = "/run/current-system/sw/bin/tee /sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq";
+          options = ["NOPASSWD"];
         }
-    ];
-    #
+      ];
+    }
+  ];
+  #
 }
-
-
-
-
-
-
-

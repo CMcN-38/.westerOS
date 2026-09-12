@@ -37,5 +37,4 @@
     symbola
     nerd-fonts.symbols-only
   ];
-  
 }

@@ -1,4 +1,8 @@
-{pkgs, config, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   # Symlink static emacs config files into ~/.config/emacs
   # bookmarks is intentionally omitted — emacs manages it at runtime
   home.file = {
@@ -13,7 +17,7 @@
   programs.emacs = {
     enable = true;
     package = pkgs.emacs;
-    extraPackages = epkgs: [ epkgs.mu4e ];
+    extraPackages = epkgs: [epkgs.mu4e];
   };
 
   services.emacs = {

@@ -25,36 +25,34 @@
   inputs,
   ...
 }: {
-#•
-#┓┏┳┓┏┓┏┓┏┓╋┏
-#┗┛┗┗┣┛┗┛┛ ┗┛
-#    ┛
+  #•
+  #┓┏┳┓┏┓┏┓┏┓╋┏
+  #┗┛┗┗┣┛┗┛┛ ┗┛
+  #    ┛
 
-    imports = [
-        # Include the results of the hardware scan.
-        ./hardware-configuration.nix
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
 
-        # Packages:
-        ../../pkgs/gui-pkgs.nix
-        ../../pkgs/serv-pkgs.nix
-        ../../pkgs/term-pkgs.nix
-        ../../pkgs/wm-pkgs.nix
-        ../../pkgs/fonts.nix
+    # Packages:
+    ../../pkgs/gui-pkgs.nix
+    ../../pkgs/serv-pkgs.nix
+    ../../pkgs/term-pkgs.nix
+    ../../pkgs/wm-pkgs.nix
+    ../../pkgs/fonts.nix
 
+    # Modules:
+    ../../modules/networking-lannister.nix
+    ../../modules/networking-shared.nix
+    ../../modules/users.nix
+    ../../modules/devices.nix
+    ../../modules/settings.nix
+    ../../modules/style.nix
+  ];
 
-        # Modules:
-        ../../modules/networking-lannister.nix
-        ../../modules/networking-shared.nix
-        ../../modules/users.nix
-        ../../modules/devices.nix
-        ../../modules/settings.nix
-        ../../modules/style.nix
-    ];
-
-    console.keyMap = "dvorak";
-    services.xserver = {
-        xkb.layout = "us";
-        xkb.variant = "dvorak";
-    };
-
+  console.keyMap = "dvorak";
+  services.xserver = {
+    xkb.layout = "us";
+    xkb.variant = "dvorak";
+  };
 }

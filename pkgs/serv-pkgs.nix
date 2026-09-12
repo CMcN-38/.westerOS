@@ -1,4 +1,3 @@
-
 #b.             8  8 8888 `8.`8888.      ,8'  ,o888888o.       d888888o.
 #888o.          8  8 8888  `8.`8888.    ,8'. 8888     `88.   .`8888:' `88.
 #Y88888o.       8  8 8888   `8.`8888.  ,8',8 8888       `8b  8.`8888.   Y8
@@ -34,6 +33,7 @@
     cmake
     ddcutil
     espanso-wayland
+    easyeffects
     gccgo13
     gtk4
     glib
@@ -70,8 +70,6 @@
     rustup
     tesseract4
     tree-sitter
-    uwsm
-
     wireguard-tools
     wgnord
     wl-clipboard
@@ -79,18 +77,18 @@
     zsa-udev-rules
 
     # Emacs tools — LSP servers, formatters, and runtime dependencies
-    nil                                          # Nix LSP
-    rust-analyzer                                # Rust LSP
-    typescript-language-server      # TS/JS LSP
-    yaml-language-server            # YAML LSP
-    vscode-langservers-extracted    # HTML/CSS/JSON LSP
-    prettier                        # Multi-language formatter
-    black                                        # Python formatter
-    sqlite                                       # org-roam database
-    graphviz                                     # org-mode diagram rendering
-    pandoc                                       # document conversion
-    gnumake                                      # vterm native module build
-    libtool                                      # vterm native module build
+    nil # Nix LSP
+    rust-analyzer # Rust LSP
+    typescript-language-server # TS/JS LSP
+    yaml-language-server # YAML LSP
+    vscode-langservers-extracted # HTML/CSS/JSON LSP
+    prettier # Multi-language formatter
+    black # Python formatter
+    sqlite # org-roam database
+    graphviz # org-mode diagram rendering
+    pandoc # document conversion
+    gnumake # vterm native module build
+    libtool # vterm native module build
   ];
 
   programs.streamdeck-ui = {
@@ -98,8 +96,7 @@
     autoStart = true; # optional
   };
 
-
-    services.upower = {
-        enable = true;
-    };
+  services.upower = {
+    enable = true;
+  };
 }

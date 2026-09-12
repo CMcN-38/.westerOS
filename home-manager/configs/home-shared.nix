@@ -1,4 +1,8 @@
-{config, pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./btop/config.nix
     ./kitty/config.nix
@@ -22,6 +26,16 @@
   qt.enable = true;
 
   services.syncthing.enable = true;
+  services.playerctld.enable = true;
+
+  # Cider desktop entry
+  xdg.desktopEntries.cider = {
+    name = "Cider";
+    genericName = "Music Player";
+    exec = "westerOS_launch_cider";
+    terminal = false;
+    categories = ["Application" "Audio" "Music"];
+  };
 
   # Zen Browser desktop entry
   xdg.desktopEntries.zen-browser = {
@@ -29,9 +43,13 @@
     genericName = "Web Browser";
     exec = "appimage-run -d ${config.home.homeDirectory}/2_desktop/zen-specific.AppImage %U";
     terminal = false;
-    categories = [ "Application" "Network" "WebBrowser" ];
-    mimeType = [ "text/html" "text/xml" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+    categories = ["Application" "Network" "WebBrowser"];
+    mimeType = ["text/html" "text/xml" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https"];
   };
+
+  # Plasma Browser Integration — native messaging host for Zen Browser MPRIS support
+  home.packages = [pkgs.kdePackages.plasma-browser-integration];
+  home.file.".mozilla/native-messaging-hosts/org.kde.plasma.browser_integration.json".source = "${pkgs.kdePackages.plasma-browser-integration}/lib/mozilla/native-messaging-hosts/org.kde.plasma.browser_integration.json";
 
   # Set Zen as default browser
   xdg.mimeApps = {
