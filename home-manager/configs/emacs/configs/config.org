@@ -507,7 +507,6 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
 #+begin_src emacs-lisp
   (add-to-list 'default-frame-alist '(alpha-background . 90))
 
-
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
@@ -587,7 +586,8 @@ Be sure to run 'nerd-icons-install-fonts' if icons are missing
     :config
     (setq elfeed-search-feed-face ":foreground #ffffff :weight bold"
           elfeed-use-curl t
-          elfeed-feeds '(("proto+feedly://feeds/feedly" feedly))))
+          elfeed-feeds '(("proto+feedly://feeds/feedly" feedly)
+                         ("https://github.com/neovim/neovim/releases.atom" neovim))))
 
   (use-package elfeed-protocol :demand t :ensure t
     :after elfeed

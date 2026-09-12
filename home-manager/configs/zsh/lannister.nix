@@ -63,74 +63,75 @@
 
   programs.zsh.initContent = lib.mkMerge [
     (lib.mkBefore ''
-    setopt correct # correct spelling errors
-    setopt extendedglob # enable extended globbing
-    setopt nocaseglob # case insensitive globbing
-    setopt rcexpandparam # expand parameter in place
-    setopt numericglobsort # sort filenames numerically when it makes sense
-    setopt appendhistory # append to the history file, don't overwrite it
-    setopt histignorealldups # don't record duplicates in the history
-    setopt inc_append_history # add commands to the history file as they are run
+      setopt correct # correct spelling errors
+      setopt extendedglob # enable extended globbing
+      setopt nocaseglob # case insensitive globbing
+      setopt rcexpandparam # expand parameter in place
+      setopt numericglobsort # sort filenames numerically when it makes sense
+      setopt appendhistory # append to the history file, don't overwrite it
+      setopt histignorealldups # don't record duplicates in the history
+      setopt inc_append_history # add commands to the history file as they are run
     '')
     ''
-    bindkey -s "^F" "/usr/local/bin/tmux-sessioniser"
+      bindkey -s "^F" "/usr/local/bin/tmux-sessioniser"
 
-    plugins=(git)
+      plugins=(git)
 
-    # zsh vim mode
-    bindkey -v
-    export KEYTIMEOUT=1
+      # zsh vim mode
+      bindkey -v
+      export KEYTIMEOUT=1
 
-    bindkey -v '^?' backward-delete-char
+      bindkey -v '^?' backward-delete-char
 
-    # Change cursor shape for different vi modes.
-    function zle-keymap-select () {
-        case $KEYMAP in
-            vicmd) echo -ne '\e[1 q';;      # block
-            viins|main) echo -ne '\e[5 q';; # beam
-        esac
-    }
-    zle -N zle-keymap-select
-    zle-line-init() {
-        zle -K viins
-        echo -ne "\e[5 q"
-    }
-    zle -N zle-line-init
-    echo -ne '\e[5 q' # Use beam shape cursor on startup.
-    preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+      # Change cursor shape for different vi modes.
+      function zle-keymap-select () {
+          case $KEYMAP in
+              vicmd) echo -ne '\e[1 q';;      # block
+              viins|main) echo -ne '\e[5 q';; # beam
+          esac
+      }
+      zle -N zle-keymap-select
+      zle-line-init() {
+          zle -K viins
+          echo -ne "\e[5 q"
+      }
+      zle -N zle-line-init
+      echo -ne '\e[5 q' # Use beam shape cursor on startup.
+      preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-    # ZSH Functions
-    function zsh_add_file() {
-        [ -f "$ZDOTDIR/$1" ] && source "$ZDOTDIR/$1"
-    }
+      # ZSH Functions
+      function zsh_add_file() {
+          [ -f "$ZDOTDIR/$1" ] && source "$ZDOTDIR/$1"
+      }
 
-    function zsh_add_plugin() {
-        PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
-        if [ -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then
-            zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
-            zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
-        else
-            git clone "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
-        fi
-    }
+      function zsh_add_plugin() {
+          PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
+          if [ -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then
+              zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
+              zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
+          else
+              git clone "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
+          fi
+      }
 
-    function zsh_add_completion() {
-        PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
-        if [ -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then
-    		completion_file_path=$(ls $ZDOTDIR/plugins/$PLUGIN_NAME/_*)
-    		fpath+="$($dirname "$completion_file_path")"
-            zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh"
-        else
-            git clone "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
-    		fpath+=$(ls $ZDOTDIR/plugins/$PLUGIN_NAME/_*)
-            [ -f $ZDOTDIR/.zccompdump ] && $ZDOTDIR/.zccompdump
-        fi
-    	completion_file="$(basename "$completion_file_path")"
-    	if [ "$2" = true ] && compinit "$completion_file:1"
-    }
+      function zsh_add_completion() {
+          PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
+          if [ -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then
+      		completion_file_path=$(ls $ZDOTDIR/plugins/$PLUGIN_NAME/_*)
+      		fpath+="$($dirname "$completion_file_path")"
+              zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh"
+          else
+              git clone "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
+      		fpath+=$(ls $ZDOTDIR/plugins/$PLUGIN_NAME/_*)
+              [ -f $ZDOTDIR/.zccompdump ] && $ZDOTDIR/.zccompdump
+          fi
+      	completion_file="$(basename "$completion_file_path")"
+      	if [ "$2" = true ] && compinit "$completion_file:1"
+      }
 
-    export PATH="$HOME/.cargo/bin:$PATH"
+      export PATH="$HOME/.cargo/bin:$PATH"
 
-    eval "$(zoxide init --cmd cd zsh)"
-  ''];
+      eval "$(zoxide init --cmd cd zsh)"
+    ''
+  ];
 }

@@ -22,7 +22,6 @@
 #                                                                                                  888
 #                                                                                             Y8b d88P
 #                                                                                              "Y88P"
-
 {
   config,
   pkgs,
@@ -39,7 +38,7 @@
     inputs.walker.homeManagerModules.default
   ];
 
-  home.keyboard.options = [ "caps:escape" ];
+  home.keyboard.options = ["caps:escape"];
 
   # Profile-sync-daemon - keeps browser profile in RAM for faster launches
   services.psd = {
@@ -70,7 +69,7 @@
       Persistent = true;
     };
     Install = {
-      WantedBy = [ "timers.target" ];
+      WantedBy = ["timers.target"];
     };
   };
 

@@ -25,53 +25,51 @@
   inputs,
   ...
 }: {
-#•
-#┓┏┳┓┏┓┏┓┏┓╋┏
-#┗┛┗┗┣┛┗┛┛ ┗┛
-#    ┛
+  #•
+  #┓┏┳┓┏┓┏┓┏┓╋┏
+  #┗┛┗┗┣┛┗┛┛ ┗┛
+  #    ┛
 
-    imports = [
-        # Include the results of the hardware scan.
-        ./hardware-configuration.nix
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
 
-        # Packages:
-        ../../pkgs/gui-pkgs.nix
-        ../../pkgs/serv-pkgs.nix
-        ../../pkgs/term-pkgs.nix
-        ../../pkgs/wm-pkgs.nix
-        ../../pkgs/fonts.nix
+    # Packages:
+    ../../pkgs/gui-pkgs.nix
+    ../../pkgs/serv-pkgs.nix
+    ../../pkgs/term-pkgs.nix
+    ../../pkgs/wm-pkgs.nix
+    ../../pkgs/fonts.nix
 
+    # Modules:
+    ../../modules/networking-targaryen.nix
+    ../../modules/networking-shared.nix
+    ../../modules/users.nix
+    ../../modules/devices.nix
+    ../../modules/settings.nix
+    ../../modules/style.nix
+  ];
 
-        # Modules:
-        ../../modules/networking-targaryen.nix
-        ../../modules/networking-shared.nix
-        ../../modules/users.nix
-        ../../modules/devices.nix
-        ../../modules/settings.nix
-        ../../modules/style.nix
-    ];
+  # Packages to enable yubikey use
+  environment.systemPackages = with pkgs; [
+    yubikey-manager
+    pam_u2f
+    libfido2
+  ];
 
-    # Packages to enable yubikey use
-    environment.systemPackages = with pkgs; [
-        yubikey-manager
-        pam_u2f
-        libfido2
-    ];
+  services.xserver = {
+    enable = true;
+    xkb.layout = "us";
+  };
 
-    services.xserver = {
-        enable = true;
-        xkb.layout = "us";
+  # Yubikey Setup for sudo
+  services.pcscd.enable = true;
+  security.pam.services = {
+    sudo = {
+      unixAuth = false;
+      u2fAuth = true;
     };
-
-    # Yubikey Setup for sudo
-    services.pcscd.enable = true;
-    security.pam.services = {
-        sudo = {
-            unixAuth = false;
-            u2fAuth = true;
-        };
-        login.unixAuth = true;  # Enable password login
-        sddm.unixAuth = true;   # Enable password for SDDM
-    };
-
+    login.unixAuth = true; # Enable password login
+    sddm.unixAuth = true; # Enable password for SDDM
+  };
 }

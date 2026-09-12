@@ -18,9 +18,11 @@
 #╚██████╔╝╚██████╔╝██║    ██║     ██║  ██║╚██████╗██║  ██╗██║  ██║╚██████╔╝███████╗███████║
 # ╚═════╝  ╚═════╝ ╚═╝    ╚═╝     ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝
 #
-{pkgs,
-inputs,
-...}: let
+{
+  pkgs,
+  inputs,
+  ...
+}: let
   pkgsTx = import inputs.nixpkgs_tx {
     system = pkgs.stdenv.hostPlatform.system;
     # If you use unfree anywhere, keep this consistent:
@@ -35,11 +37,12 @@ in {
   environment.systemPackages = with pkgs; [
     pkgsTx.transmission_4-gtk
     # GUI packages below
-    blender                     # 3d rendering
-    (pkgs.symlinkJoin {           # e-book manager (wrapped to isolate from system Qt env — calibre bundles its own Qt)
+    blender # 3d rendering
+    (pkgs.symlinkJoin {
+      # e-book manager (wrapped to isolate from system Qt env — calibre bundles its own Qt)
       name = "calibre";
-      paths = [ pkgs.calibre ];
-      buildInputs = [ pkgs.makeWrapper ];
+      paths = [pkgs.calibre];
+      buildInputs = [pkgs.makeWrapper];
       postBuild = ''
         wrapProgram $out/bin/calibre \
           --unset QT_STYLE_OVERRIDE \
@@ -48,29 +51,30 @@ in {
       '';
     })
     catppuccin-kvantum
-    discord-ptb                     # discord
+    discord-ptb # discord
     # betterdiscordctl
     # discord-canary
-    evince                      # document viewer
+    evince # document viewer
     # google-chrome
-    goxlr-utility               # goxlr controller
-    imv                         # image viewer
-    kitty                       # terminal
-    keymapp                     # keyboard mapping
-    localsend                   # local file sending
+    goxlr-utility # goxlr controller
+    imv # image viewer
+    kitty # terminal
+    keymapp # keyboard mapping
+    localsend # local file sending
     protonmail-bridge
     protonmail-desktop
-    
-rpi-imager
 
-    mpv                         # multimedia player
-    obsidian                    # pkm notes
-    obs-studio                  # screen recording
-    proton-pass                 # password manager
-    thonny                      # pi-zero IDE
+    librewolf
+    firefox
+
+    mpv # multimedia player
+    obsidian # pkm notes
+    obs-studio # screen recording
+    proton-pass # password manager
+    thonny # pi-zero IDE
     # transmission_4-gtk          # torrent interface
   ];
 
   services.goxlr-utility.enable = true;
-  programs.steam.enable = true; 
+  programs.steam.enable = true;
 }

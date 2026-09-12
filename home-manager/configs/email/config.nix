@@ -1,10 +1,13 @@
-{ config, pkgs, secrets, ... }:
-let
+{
+  config,
+  pkgs,
+  secrets,
+  ...
+}: let
   emailCfg = secrets.email or {};
-  address  = emailCfg.address  or "user@proton.me";
+  address = emailCfg.address  or "user@proton.me";
   realName = emailCfg.realName or "User";
 in {
-
   # ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   # ┃  ProtonMail Bridge — headless IMAP/SMTP local proxy  ┃
   # ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
@@ -22,7 +25,7 @@ in {
   systemd.user.services.protonmail-bridge = {
     Unit = {
       Description = "ProtonMail Bridge";
-      After = [ "network.target" ];
+      After = ["network.target"];
     };
     Service = {
       ExecStartPre = pkgs.writeShellScript "bridge-prestart" ''
@@ -38,7 +41,7 @@ in {
       TimeoutStopSec = "10";
     };
     Install = {
-      WantedBy = [ "default.target" ];
+      WantedBy = ["default.target"];
     };
   };
 
@@ -50,7 +53,7 @@ in {
     maildirBasePath = "${config.home.homeDirectory}/1_documents/00-09_meta/04_proton_bridge";
 
     accounts.protonmail = {
-      primary  = true;
+      primary = true;
       userName = address;
       inherit address realName;
 
@@ -73,7 +76,7 @@ in {
         enable = true;
         create = "both";
         expunge = "both";
-        patterns = [ "*" "!Labels/*" ];
+        patterns = ["*" "!Labels/*"];
       };
 
       msmtp.enable = true;
