@@ -184,6 +184,8 @@ wayland.windowManager.hyprland = {
           hl.window_rule({ match = { class = "^(firefox)$" },         opacity = 0.95 })
           hl.window_rule({ match = { class = "^(zen)$" },             opacity = 0.95 })
           hl.window_rule({ match = { title = "^(.*YouTube.*)$" },     opacity = 1 })
+          hl.window_rule({ match = { title = "^(.*Netflix.*)$" },     opacity = 1 })
+          hl.window_rule({ match = { title = "^(.*netflix.*)$" },     opacity = 1 })
           hl.window_rule({ match = { class = "^(discord-ptb)$" },         opacity = 0.95 })
           hl.window_rule({ match = { class = "^(Cider)$" },           opacity = 0.95 })
           hl.window_rule({ match = { class = "^(Emacs)$" },           opacity = 0.95 })
@@ -258,7 +260,7 @@ wayland.windowManager.hyprland = {
                         general = {
                                 before_sleep_cmd = "loginctl lock-session";
                                 inhibit_sleep = 3;
-                                after_sleep_cmd = "hyprctl dispatch dpms on";
+                                after_sleep_cmd = "sh -c 'hyprctl dispatch dpms on'";
                                 ignore_dbus_inhibit = false;
                                 lock_cmd = "hyprlock";
                         };
@@ -266,13 +268,13 @@ wayland.windowManager.hyprland = {
                         listener = [
                                 {
                                         timeout = 300;
-                                        on-timeout = "hyprlock";
+                                        on-timeout = "loginctl lock-session";
                                         condition = "! westerOS_check_audio";
                                 }
                                 {
                                         timeout = 600;
-                                        on-timeout = "hyprctl dispatch dpms off";
-                                        on-resume = "hyprctl dispatch dpms on";
+                                        on-timeout = "sh -c 'hyprctl dispatch dpms off'";
+                                        on-resume = "sh -c 'hyprctl dispatch dpms on'";
                                         condition = "! westerOS_check_audio";
                                 }
                         ];

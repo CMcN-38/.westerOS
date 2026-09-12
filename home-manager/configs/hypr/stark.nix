@@ -261,7 +261,7 @@ wayland.windowManager.hyprland = {
                         general = {
                                 before_sleep_cmd = "loginctl lock-session";
                                 inhibit_sleep = 3;
-                                after_sleep_cmd = "hyprctl dispatch dpms on";
+                                after_sleep_cmd = "sh -c 'hyprctl dispatch dpms on'";
                                 ignore_dbus_inhibit = false;
                                 lock_cmd = "hyprlock";
                         };
@@ -269,13 +269,13 @@ wayland.windowManager.hyprland = {
                         listener = [
                                 {
                                         timeout = 600;
-                                        on-timeout = "hyprlock";
+                                        on-timeout = "loginctl lock-session";
                                         condition = "! westerOS_check_audio";
                                 }
                                 {
                                         timeout = 800;
-                                        on-timeout = "hyprctl dispatch dpms off";
-                                        on-resume = "hyprctl dispatch dpms on";
+                                        on-timeout = "sh -c 'hyprctl dispatch dpms off'";
+                                        on-resume = "sh -c 'hyprctl dispatch dpms on'";
                                         condition = "! westerOS_check_audio";
                                 }
                         ];

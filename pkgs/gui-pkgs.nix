@@ -61,14 +61,17 @@ in {
     protonmail-bridge
     protonmail-desktop
     
-rpi-imager
-
     mpv                         # multimedia player
     obsidian                    # pkm notes
     obs-studio                  # screen recording
     proton-pass                 # password manager
-    thonny                      # pi-zero IDE
     # transmission_4-gtk          # torrent interface
+
+
+    yt-dlp
+    firefox
+    librewolf
+
   ];
 
   services.goxlr-utility.enable = true;
