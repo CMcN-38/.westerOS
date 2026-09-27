@@ -36,5 +36,6 @@
     nerd-fonts.fira-mono
     symbola
     nerd-fonts.symbols-only
+    vista-fonts
   ];
 }

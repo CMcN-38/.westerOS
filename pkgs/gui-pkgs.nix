@@ -71,6 +71,8 @@ in {
     thonny # pi-zero IDE
     # transmission_4-gtk          # torrent interface
 
+    libreoffice
+
 
     yt-dlp
     firefox
