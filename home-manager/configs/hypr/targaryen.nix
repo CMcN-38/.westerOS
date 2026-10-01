@@ -292,14 +292,11 @@
 
       animations = {
         enabled = true;
-        fade_in = {
-          duration = 300;
-          bezier = "easeOutQuint";
-        };
-        fade_out = {
-          duration = 300;
-          bezier = "easeOutQuint";
-        };
+        bezier = "easeOutQuint, 0.23, 1, 0.32, 1";
+        animation = [
+          "fadeIn, 1, 3, easeOutQuint"
+          "fadeOut, 1, 3, easeOutQuint"
+        ];
       };
     };
   };
