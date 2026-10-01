@@ -258,6 +258,7 @@
       hl.bind("SHIFT + XF86MonBrightnessDown", hl.dsp.exec_cmd("westerOS_brightness_kbd down"),              { repeating = true })
     '';
   };
+
   services.hypridle = {
     enable = true;
     settings = {
@@ -269,43 +270,6 @@
         lock_cmd = "hyprlock";
       };
 
-<<<<<<< HEAD
-          -- OSD / Media keys
-          hl.bind("XF86AudioRaiseVolume",          hl.dsp.exec_cmd(osdclient .. " --output-volume raise"),       { locked = true, repeating = true })
-          hl.bind("XF86AudioLowerVolume",          hl.dsp.exec_cmd(osdclient .. " --output-volume lower"),       { locked = true, repeating = true })
-          hl.bind("XF86AudioMute",                 hl.dsp.exec_cmd(osdclient .. " --output-volume mute-toggle"), { locked = true, repeating = true })
-          hl.bind("XF86MonBrightnessUp",           hl.dsp.exec_cmd("westerOS_brightness_display +10%"),          { locked = true, repeating = true })
-          hl.bind("XF86MonBrightnessDown",         hl.dsp.exec_cmd("westerOS_brightness_display 10%-"),          { locked = true, repeating = true })
-          hl.bind("SHIFT + XF86MonBrightnessUp",   hl.dsp.exec_cmd("westerOS_brightness_kbd up"),                { repeating = true })
-          hl.bind("SHIFT + XF86MonBrightnessDown", hl.dsp.exec_cmd("westerOS_brightness_kbd down"),              { repeating = true })
-        '';
-};
-        services.hypridle = {
-                enable = true;
-                settings = {
-                        general = {
-                                before_sleep_cmd = "loginctl lock-session";
-                                inhibit_sleep = 3;
-                                after_sleep_cmd = "sh -c 'hyprctl dispatch dpms on'";
-                                ignore_dbus_inhibit = false;
-                                lock_cmd = "hyprlock";
-                        };
-
-                        listener = [
-                                {
-                                        timeout = 600;
-                                        on-timeout = "loginctl lock-session";
-                                        condition = "! westerOS_check_audio";
-                                }
-                                {
-                                        timeout = 800;
-                                        on-timeout = "sh -c 'hyprctl dispatch dpms off'";
-                                        on-resume = "sh -c 'hyprctl dispatch dpms on'";
-                                        condition = "! westerOS_check_audio";
-                                }
-                        ];
-                };
-=======
       listener = [
         {
           timeout = 1500;
@@ -334,15 +298,11 @@
 
       animations = {
         enabled = true;
-        fade_in = {
-          duration = 300;
-          bezier = "easeOutQuint";
->>>>>>> e3fdd4b82d2ec92d8153f5e0f08903391dbc90c9
-        };
-        fade_out = {
-          duration = 300;
-          bezier = "easeOutQuint";
-        };
+        bezier = "easeOutQuint, 0.23, 1, 0.32, 1";
+        animation = [
+          "fadeIn, 1, 3, easeOutQuint"
+          "fadeOut, 1, 3, easeOutQuint"
+        ];
       };
     };
   };
